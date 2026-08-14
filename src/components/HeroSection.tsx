@@ -115,7 +115,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
       </div>
 
       {/* Right Edge Stacked Social Icons */}
-      <div className="hidden lg:flex fixed right-6 top-1/2 -translate-y-1/2 z-40 flex-col gap-4 text-[#666666]">
+      <div className="hidden lg:flex absolute right-6 top-1/2 -translate-y-1/2 z-20 flex-col gap-4 text-[#666666]">
         <a
           href="https://linkedin.com"
           target="_blank"

@@ -50,14 +50,10 @@
   background: #E85500;
 }
 
-/* Hide default cursor on desktop devices supporting fine pointer */
-@media (pointer: fine) {
-  body.custom-cursor-active,
-  body.custom-cursor-active a,
-  body.custom-cursor-active button,
-  body.custom-cursor-active [role="button"] {
-    cursor: none !important;
-  }
+/* Sleek Cursor Follower Glow styling */
+body.custom-cursor-active {
+  /* Keep standard system cursor active for 100% reliability */
+  cursor: auto;
 }
 
 /* Frosted Glass Navigation Pill */

@@ -225,9 +225,9 @@ export const ExplosionSection: React.FC = () => {
             return (
               <div
                 key={node.id}
-                className="absolute z-20 glass-card-dark p-3.5 rounded-2xl border border-white/15 w-52 sm:w-56 shadow-2xl transition-all duration-300 hover:border-[#E85500] hover:scale-105 interactive-hover"
+                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 glass-card-dark p-3.5 rounded-2xl border border-white/15 w-52 sm:w-56 shadow-2xl transition-all duration-300 hover:border-[#E85500] hover:scale-105 interactive-hover"
                 style={{
-                  transform: `translate3d(${x}px, ${y}px, 0)`,
+                  transform: `translate3d(calc(-50% + ${x}px), calc(-50% + ${y}px), 0)`,
                   opacity: 1,
                 }}
               >
