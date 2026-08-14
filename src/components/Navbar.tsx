@@ -86,16 +86,6 @@ export const Navbar: React.FC<NavbarProps> = ({
             </a>
 
             <a
-              href="#story"
-              onClick={() => {
-                if (currentPage !== 'home') onNavigateHome();
-              }}
-              className="hover:text-[#E85500] transition-colors"
-            >
-              Story
-            </a>
-
-            <a
               href="#work"
               onClick={() => {
                 if (currentPage !== 'home') onNavigateHome();
@@ -195,17 +185,6 @@ export const Navbar: React.FC<NavbarProps> = ({
               className="hover:text-[#E85500] transition-colors"
             >
               Explosion
-            </a>
-
-            <a
-              href="#story"
-              onClick={() => {
-                setMobileMenuOpen(false);
-                if (currentPage !== 'home') onNavigateHome();
-              }}
-              className="hover:text-[#E85500] transition-colors"
-            >
-              Story
             </a>
 
             <a

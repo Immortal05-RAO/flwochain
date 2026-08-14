@@ -4,7 +4,6 @@ import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
 import { ExplosionSection } from './components/ExplosionSection';
 import { ServicesSection } from './components/ServicesSection';
-import { StoryNarrativeSection } from './components/StoryNarrativeSection';
 import { HowItWorksSection } from './components/HowItWorksSection';
 import { AIReceptionistShowcase } from './components/AIReceptionistShowcase';
 import { WhatsAppShowcase } from './components/WhatsAppShowcase';
@@ -65,25 +64,22 @@ export function App() {
             {/* 3. Services Section with Live Interactive Mini Demos */}
             <ServicesSection onOpenBooking={handleOpenBooking} />
 
-            {/* 4. The Flowchain Narrative Story (5 Chapters) */}
-            <StoryNarrativeSection />
-
-            {/* 5. How Flowchain Works (3 Steps) */}
+            {/* 4. How Flowchain Works (3 Steps) */}
             <HowItWorksSection onOpenBooking={handleOpenBooking} />
 
-            {/* 6. AI Receptionist Showcase (Full Dark Mode Section Break) */}
+            {/* 5. AI Receptionist Showcase (Full Dark Mode Section Break) */}
             <AIReceptionistShowcase onOpenBooking={handleOpenBooking} />
 
-            {/* 7. WhatsApp Automation Spotlight */}
+            {/* 6. WhatsApp Automation Spotlight */}
             <WhatsAppShowcase onOpenBooking={handleOpenBooking} />
 
-            {/* 8. Selected Work / Portfolio (3D Cursor Tilt Cards) */}
+            {/* 7. Selected Work / Portfolio (3D Cursor Tilt Cards) */}
             <SelectedWorkSection onOpenBooking={handleOpenBooking} />
 
-            {/* 9. About & Positioning Philosophy */}
+            {/* 8. About & Positioning Philosophy */}
             <AboutPositioningSection />
 
-            {/* 10. Final Call to Action */}
+            {/* 9. Final Call to Action */}
             <FinalCTASection onOpenBooking={handleOpenBooking} />
           </>
         ) : (

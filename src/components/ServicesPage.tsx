@@ -8,6 +8,8 @@ import {
   Send,
   RefreshCw,
   ArrowLeft,
+  Monitor,
+  Layers,
 } from 'lucide-react';
 
 interface ServicesPageProps {
@@ -16,7 +18,8 @@ interface ServicesPageProps {
 }
 
 export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenBooking, onNavigateHome }) => {
-  const [activeCategory, setActiveCategory] = useState<string>('all');
+  // Default to first separate service tab ('voice') - NO 'all' tab!
+  const [activeCategory, setActiveCategory] = useState<string>('voice');
 
   // --- Demo 01: Voice Receptionist State ---
   const [voiceVoiceType, setVoiceVoiceType] = useState<'concierge' | 'technical' | 'sales'>('concierge');
@@ -53,7 +56,6 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenBooking, onNav
     setWaMessages(updated);
     if (!textToSend) setUserCustomInput('');
 
-    // AI Auto-Reply Simulation
     setTimeout(() => {
       let aiResponse = 'Our AI agent processes leads 24/7, qualifies budget, and books calls directly to your calendar!';
       if (text.toLowerCase().includes('price') || text.toLowerCase().includes('quote')) {
@@ -89,14 +91,13 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenBooking, onNav
     }, 1800);
   };
 
-
-
+  // Separate Categories (NO "ALL SERVICES" TAB)
   const categories = [
-    { id: 'all', name: 'All Services (6)' },
     { id: 'voice', name: 'AI Voice Receptionist' },
     { id: 'whatsapp', name: 'WhatsApp Automation' },
     { id: 'workflow', name: 'AI Workflows & Nodes' },
     { id: 'web', name: 'Web Design & CRMs' },
+    { id: 'integrations', name: 'CRM & API Integrations' },
   ];
 
   return (
@@ -118,17 +119,17 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenBooking, onNav
         </div>
 
         {/* Page Hero Header */}
-        <div className="mb-16">
+        <div className="mb-12">
           <h1 className="font-syne font-extrabold text-3xl sm:text-5xl lg:text-6xl text-[#111111] tracking-tight leading-snug mb-4">
             INTERACTIVE SERVICES LAB <br />
             <span className="text-[#E85500]">& LIVE DEMO SUITE.</span>
           </h1>
 
           <p className="font-sans text-base sm:text-lg text-[#555555] max-w-2xl leading-relaxed">
-            Test drive our autonomous voice agents, WhatsApp sales bots, workflow pipeline engines, and bespoke digital operating systems in real-time.
+            Select a service tab below to test drive its dedicated live interactive demo.
           </p>
 
-          {/* Filter Bar */}
+          {/* Separate Service Tabs (NO ALL SERVICES TAB) */}
           <div className="flex flex-wrap items-center gap-2 pt-8">
             {categories.map((cat) => (
               <button
@@ -146,16 +147,16 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenBooking, onNav
           </div>
         </div>
 
-        {/* DEMOS GRID */}
-        <div className="space-y-24">
-          {/* DEMO 01: AI VOICE RECEPTIONIST */}
-          {(activeCategory === 'all' || activeCategory === 'voice') && (
+        {/* DEMOS DISPLAY (Displays Dedicated Demo for Selected Tab) */}
+        <div className="space-y-16">
+          {/* TAB 01: AI VOICE RECEPTIONIST */}
+          {activeCategory === 'voice' && (
             <div className="glass-card-light p-8 sm:p-10 rounded-3xl border border-black/10 shadow-2xl relative overflow-hidden">
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 mb-8 border-b border-black/10">
                 <div>
                   <div className="flex items-center gap-2 font-mono text-xs text-[#00D2FF] font-bold uppercase mb-2">
                     <PhoneCall className="w-4 h-4" />
-                    <span>SERVICE DEMO 01 • AI VOICE AGENTS</span>
+                    <span>SERVICE LAB • AI VOICE AGENTS</span>
                   </div>
                   <h2 className="font-syne font-extrabold text-3xl sm:text-4xl text-[#111111]">
                     AI Voice Receptionist Studio
@@ -261,14 +262,14 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenBooking, onNav
             </div>
           )}
 
-          {/* DEMO 02: WHATSAPP AUTOMATION SANDBOX */}
-          {(activeCategory === 'all' || activeCategory === 'whatsapp') && (
+          {/* TAB 02: WHATSAPP AUTOMATION */}
+          {activeCategory === 'whatsapp' && (
             <div className="glass-card-light p-8 sm:p-10 rounded-3xl border border-black/10 shadow-2xl relative overflow-hidden">
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 mb-8 border-b border-black/10">
                 <div>
                   <div className="flex items-center gap-2 font-mono text-xs text-[#25D366] font-bold uppercase mb-2">
                     <MessageSquare className="w-4 h-4" />
-                    <span>SERVICE DEMO 02 • WHATSAPP CRM</span>
+                    <span>SERVICE LAB • WHATSAPP CRM</span>
                   </div>
                   <h2 className="font-syne font-extrabold text-3xl sm:text-4xl text-[#111111]">
                     Interactive WhatsApp Bot Simulator
@@ -377,14 +378,14 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenBooking, onNav
             </div>
           )}
 
-          {/* DEMO 03: WORKFLOW PIPELINE NODE BUILDER */}
-          {(activeCategory === 'all' || activeCategory === 'workflow') && (
+          {/* TAB 03: AI WORKFLOWS & NODES */}
+          {activeCategory === 'workflow' && (
             <div className="glass-card-light p-8 sm:p-10 rounded-3xl border border-black/10 shadow-2xl relative overflow-hidden">
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 mb-8 border-b border-black/10">
                 <div>
                   <div className="flex items-center gap-2 font-mono text-xs text-[#FFBD2E] font-bold uppercase mb-2">
                     <Cpu className="w-4 h-4" />
-                    <span>SERVICE DEMO 03 • AI WORKFLOWS</span>
+                    <span>SERVICE LAB • AI WORKFLOWS</span>
                   </div>
                   <h2 className="font-syne font-extrabold text-3xl sm:text-4xl text-[#111111]">
                     Autonomous Workflow Engine Simulator
@@ -456,7 +457,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenBooking, onNav
                       </div>
                     ) : (
                       workflowLogs.map((log, i) => (
-                        <div key={i} className="p-3 bg-white/5 rounded-xl border border-white/5 text-[#FFBD2E] animate-fade-in">
+                        <div key={i} className="p-3 bg-white/5 rounded-xl border border-white/5 text-[#FFBD2E]">
                           {log}
                         </div>
                       ))
@@ -466,6 +467,141 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenBooking, onNav
                   <div className="flex items-center justify-between pt-3 border-t border-white/10 text-[10px] text-white/40">
                     <span>ZERO MANUAL DATA ENTRY</span>
                     <span>100% AUTOMATED</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 04: WEB DESIGN & CRMs */}
+          {activeCategory === 'web' && (
+            <div className="glass-card-light p-8 sm:p-10 rounded-3xl border border-black/10 shadow-2xl relative overflow-hidden">
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 mb-8 border-b border-black/10">
+                <div>
+                  <div className="flex items-center gap-2 font-mono text-xs text-[#E85500] font-bold uppercase mb-2">
+                    <Monitor className="w-4 h-4" />
+                    <span>SERVICE LAB • WEB DESIGN & SYSTEMS</span>
+                  </div>
+                  <h2 className="font-syne font-extrabold text-3xl sm:text-4xl text-[#111111]">
+                    High-Conversion Web Architecture
+                  </h2>
+                </div>
+
+                <button
+                  onClick={onOpenBooking}
+                  className="px-6 py-3 bg-[#E85500] text-white font-mono text-xs font-bold uppercase tracking-wider rounded-full shadow-lg hover:scale-105 transition-transform"
+                >
+                  Request Web Audit
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <div className="lg:col-span-5 space-y-4 font-sans">
+                  <p className="text-sm text-[#444444] leading-relaxed">
+                    We build conversion-driven digital platforms with editorial typography, sub-50ms page speed, and built-in lead capture engines.
+                  </p>
+
+                  <div className="space-y-3 font-mono text-xs pt-2">
+                    <div className="p-3 bg-white rounded-xl border border-black/10 flex items-center justify-between">
+                      <span>Performance Score</span>
+                      <span className="text-green-600 font-bold">100 / 100</span>
+                    </div>
+                    <div className="p-3 bg-white rounded-xl border border-black/10 flex items-center justify-between">
+                      <span>SEO Authority Rating</span>
+                      <span className="text-green-600 font-bold">A+ Certified</span>
+                    </div>
+                    <div className="p-3 bg-white rounded-xl border border-black/10 flex items-center justify-between">
+                      <span>Conversion Optimization</span>
+                      <span className="text-[#E85500] font-bold">+340% Lift</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="lg:col-span-7 bg-[#0E0E12] text-white rounded-3xl p-6 border border-white/10 font-mono text-xs shadow-2xl">
+                  <div className="flex items-center justify-between pb-3 border-b border-white/10 text-white/50 text-[10px]">
+                    <span>BROWSER PREVIEW • FLOWCHAIN OS</span>
+                    <span className="text-green-400">● LIVE PREVIEW</span>
+                  </div>
+
+                  <div className="my-4 p-4 bg-white/5 rounded-2xl border border-white/10 space-y-3">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="font-syne font-bold text-white">CLIENT DASHBOARD PORTAL</span>
+                      <span className="px-2 py-0.5 bg-[#E85500] text-white rounded-full text-[9px]">REAL-TIME</span>
+                    </div>
+                    <div className="grid grid-cols-3 gap-2 text-center pt-2">
+                      <div className="p-2 bg-white/5 rounded-lg">
+                        <div className="text-[9px] text-white/50">LEADS</div>
+                        <div className="font-bold text-sm text-white">1,420</div>
+                      </div>
+                      <div className="p-2 bg-white/5 rounded-lg">
+                        <div className="text-[9px] text-white/50">BOOKED</div>
+                        <div className="font-bold text-sm text-[#00D2FF]">382</div>
+                      </div>
+                      <div className="p-2 bg-white/5 rounded-lg">
+                        <div className="text-[9px] text-white/50">REVENUE</div>
+                        <div className="font-bold text-sm text-[#25D366]">$98.4k</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 05: CRM & API INTEGRATIONS */}
+          {activeCategory === 'integrations' && (
+            <div className="glass-card-light p-8 sm:p-10 rounded-3xl border border-black/10 shadow-2xl relative overflow-hidden">
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 mb-8 border-b border-black/10">
+                <div>
+                  <div className="flex items-center gap-2 font-mono text-xs text-[#3B82F6] font-bold uppercase mb-2">
+                    <Layers className="w-4 h-4" />
+                    <span>SERVICE LAB • CRM & API INTEGRATIONS</span>
+                  </div>
+                  <h2 className="font-syne font-extrabold text-3xl sm:text-4xl text-[#111111]">
+                    Connected Data Ecosystem
+                  </h2>
+                </div>
+
+                <button
+                  onClick={onOpenBooking}
+                  className="px-6 py-3 bg-[#3B82F6] text-white font-mono text-xs font-bold uppercase tracking-wider rounded-full shadow-lg hover:scale-105 transition-transform"
+                >
+                  Connect Your Stack
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <div className="lg:col-span-5 space-y-4 font-sans">
+                  <p className="text-sm text-[#444444] leading-relaxed">
+                    We bridge your existing CRM, payment gateways, calendar systems, and communication channels with bi-directional real-time webhooks.
+                  </p>
+
+                  <div className="space-y-2 font-mono text-xs pt-2">
+                    {['HubSpot ↔ Stripe Sync', 'Salesforce Webhooks', 'Google Calendar Auto-Booking', 'Zapier & n8n Custom Nodes'].map((item) => (
+                      <div key={item} className="p-3 bg-white rounded-xl border border-black/10 flex items-center justify-between">
+                        <span>{item}</span>
+                        <span className="text-blue-600 font-bold">✓ ACTIVE</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="lg:col-span-7 bg-[#0A0A0C] text-white rounded-3xl p-6 border border-white/10 font-mono text-xs shadow-2xl">
+                  <div className="flex items-center justify-between pb-3 border-b border-white/10 text-white/50 text-[10px]">
+                    <span>DATA SYNC MONITOR</span>
+                    <span className="text-blue-400">● 100% SYNCED</span>
+                  </div>
+
+                  <div className="my-4 p-4 bg-white/5 rounded-2xl border border-white/10 space-y-3">
+                    <div className="flex items-center justify-between text-xs text-blue-400">
+                      <span>SYNC STATUS: Stripe ↔ HubSpot</span>
+                      <RefreshCw className="w-4 h-4 animate-spin" />
+                    </div>
+                    <div className="p-3 bg-black/60 rounded-xl text-white/80 text-[11px] space-y-1">
+                      <div>&gt; Webhook received from Stripe (evt_3M190...)</div>
+                      <div>&gt; Customer ID mapped: cus_9821a0</div>
+                      <div className="text-green-400">&gt; HubSpot deal updated: "Closed-Won ($4,200)"</div>
+                    </div>
                   </div>
                 </div>
               </div>
