@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, Phone, Mail } from 'lucide-react';
 
 interface FooterSectionProps {
   onOpenBooking?: () => void;
@@ -20,8 +20,8 @@ export const FooterSection: React.FC<FooterSectionProps> = () => {
         </div>
 
         {/* Brand Statement */}
-        <p className="font-sans text-xs sm:text-sm text-[#888888] max-w-sm leading-relaxed">
-          We don't build websites. We build complete digital operating systems.
+        <p className="font-sans text-xs sm:text-sm text-[#888888] max-w-md leading-relaxed">
+          Flowchain is a digital systems and AI automation studio founded by Shashwat V. Rao and Dev U.
         </p>
 
         {/* Navigation Links Stack (Centered, 14px) */}
@@ -43,14 +43,30 @@ export const FooterSection: React.FC<FooterSectionProps> = () => {
           </a>
         </div>
 
-        {/* Tappable Contact Email */}
-        <a
-          href="mailto:hello@flowchain.ai"
-          className="font-mono text-sm sm:text-base text-[#E85500] font-semibold hover:underline flex items-center gap-1.5"
-        >
-          <span>hello@flowchain.ai</span>
-          <ArrowUpRight className="w-4 h-4" />
-        </a>
+        {/* Direct Contact Stack: Email & Phone Numbers */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 pt-2">
+          {/* Email */}
+          <a
+            href="mailto:flowchain05@gmail.com"
+            className="font-mono text-sm sm:text-base text-[#E85500] font-semibold hover:underline flex items-center gap-2"
+          >
+            <Mail className="w-4 h-4 text-[#E85500]" />
+            <span>flowchain05@gmail.com</span>
+            <ArrowUpRight className="w-4 h-4" />
+          </a>
+
+          {/* Phone Numbers */}
+          <div className="flex items-center gap-3 font-mono text-xs text-white/90">
+            <Phone className="w-4 h-4 text-[#E85500]" />
+            <a href="tel:9686071617" className="hover:text-[#E85500] transition-colors font-bold">
+              +91 96860 71617
+            </a>
+            <span>•</span>
+            <a href="tel:8951648748" className="hover:text-[#E85500] transition-colors font-bold">
+              +91 89516 48748
+            </a>
+          </div>
+        </div>
 
         {/* Horizontal Row Social Icons (44x44 Touch Targets) */}
         <div className="flex items-center justify-center gap-4 text-white/80">
@@ -91,7 +107,7 @@ export const FooterSection: React.FC<FooterSectionProps> = () => {
 
         {/* Copyright Bottom */}
         <div className="pt-6 border-t border-white/10 w-full text-center font-mono text-xs text-[#888888]">
-          © {new Date().getFullYear()} FLOWCHAIN DIGITAL SYSTEMS AGENCY. ALL RIGHTS RESERVED.
+          © {new Date().getFullYear()} FLOWCHAIN DIGITAL SYSTEMS STUDIO • SHASHWAT V. RAO & DEV U. ALL RIGHTS RESERVED.
         </div>
       </div>
     </footer>

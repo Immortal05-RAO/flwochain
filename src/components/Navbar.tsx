@@ -223,8 +223,10 @@ export const Navbar: React.FC<NavbarProps> = ({
               <span>Book a Call</span>
             </button>
 
-            <div className="text-center font-mono text-xs text-[#888888]">
-              hello@flowchain.ai • © 2026 FLOWCHAIN
+            <div className="text-center font-mono text-xs text-[#888888] space-y-1">
+              <div>flowchain05@gmail.com</div>
+              <div>+91 96860 71617 • +91 89516 48748</div>
+              <div className="text-[10px] text-white/40 pt-1">Founded by Shashwat V. Rao & Dev U.</div>
             </div>
           </div>
         </div>
