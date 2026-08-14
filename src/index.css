@@ -50,11 +50,7 @@
   background: #E85500;
 }
 
-/* Sleek Cursor Follower Glow styling */
-body.custom-cursor-active {
-  /* Keep standard system cursor active for 100% reliability */
-  cursor: auto;
-}
+
 
 /* Frosted Glass Navigation Pill */
 .glass-nav-pill {

@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { CustomCursor } from './components/CustomCursor';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
 import { ExplosionSection } from './components/ExplosionSection';
@@ -41,9 +40,6 @@ export function App() {
 
   return (
     <div className="relative min-h-screen w-full bg-[#EBEBEB] text-[#111111] font-sans overflow-x-hidden selection:bg-[#E85500] selection:text-white">
-      {/* Custom Interactive Dot & Ring Cursor */}
-      <CustomCursor />
-
       {/* Frosted Glass Navigation Pill with Page Switcher */}
       <Navbar
         currentPage={currentPage}
