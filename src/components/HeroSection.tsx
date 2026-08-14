@@ -18,18 +18,31 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
   return (
     <section
       id="hero"
-      className="relative min-h-screen w-full bg-[#EBEBEB] text-[#111111] pt-28 sm:pt-36 md:pt-40 pb-16 px-5 sm:px-8 md:px-12 lg:px-16 flex flex-col justify-between overflow-hidden selection:bg-[#E85500] selection:text-white"
+      className="relative min-h-screen w-full bg-[#EBEBEB] text-[#111111] pt-28 sm:pt-36 md:pt-40 pb-16 px-5 sm:px-8 md:px-12 lg:px-16 flex flex-col justify-between overflow-hidden selection:bg-[#E85500] selection:text-white z-0"
     >
-      {/* FLOWCHAIN WATERMARK — SUBTLE WALLPAPER DEPTH (#C8C8C3, Opacity 0.55, Z-Index 0) */}
-      <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-syne font-black uppercase text-[#C8C8C3] tracking-[0.05em] whitespace-nowrap pointer-events-none select-none z-0"
-        style={{
-          fontSize: 'clamp(60px, 8vw, 130px)',
-          fontWeight: 900,
-          opacity: 0.55,
-        }}
-      >
-        FLOWCHAIN
+      {/* PERFECT FIT FLOWCHAIN WATERMARK SVG (Strictly constrained to 88vw max-width on mobile to guarantee ZERO overflow & zero bleed into navbar) */}
+      <div className="absolute top-[48%] md:top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[88vw] md:max-w-5xl px-2 pointer-events-none select-none z-0">
+        <svg
+          className="w-full h-auto"
+          viewBox="0 0 1000 150"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <text
+            x="50%"
+            y="55%"
+            dominantBaseline="middle"
+            textAnchor="middle"
+            fill="#C8C8C3"
+            opacity="0.55"
+            fontFamily="Syne, sans-serif"
+            fontWeight="900"
+            fontSize="120"
+            letterSpacing="2"
+          >
+            FLOWCHAIN
+          </text>
+        </svg>
       </div>
 
       {/* Top Bar Metadata (Z-Index 10) */}
