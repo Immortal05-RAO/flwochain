@@ -7,7 +7,7 @@ export const ThreeHeroCanvas: React.FC = () => {
       <style>{`
         @keyframes heroImgBob {
           0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-10px); }
+          50% { transform: translateY(-12px); }
         }
         .animate-hero-img-bob {
           animation: heroImgBob 4s ease-in-out infinite;
@@ -29,7 +29,7 @@ export const ThreeHeroCanvas: React.FC = () => {
       `}</style>
 
       {/* Floating Accent 1: WhatsApp Green Sphere Icon */}
-      <div className="absolute -top-2 left-4 md:-left-4 z-20 w-12 h-12 rounded-full bg-[#25D366] text-white flex items-center justify-center font-bold text-lg shadow-xl animate-accent-1 border-2 border-white">
+      <div className="absolute top-2 left-4 md:-left-4 z-20 w-12 h-12 rounded-full bg-[#25D366] text-white flex items-center justify-center font-bold text-lg shadow-xl animate-accent-1 border-2 border-white">
         💬
       </div>
 
@@ -52,13 +52,13 @@ export const ThreeHeroCanvas: React.FC = () => {
         <span className="text-[#E85500] font-bold">&lt;Flowchain /&gt;</span>
       </div>
 
-      {/* Main Orange Retro All-In-One Computer Image with Mix-Blend Multiply/Darken & Drop-Shadow */}
+      {/* Transparent PNG Cutout Orange Retro Computer (NO SQUARE BG BOX) */}
       <img
-        src="/hero_orange_computer.jpg"
-        alt="Flowchain Orange Retro AI Computer"
-        className="relative z-10 max-h-[82%] md:max-h-[90%] w-auto object-contain animate-hero-img-bob mix-blend-multiply transition-all duration-300"
+        src="/hero_orange_computer.png"
+        alt="Flowchain Orange Retro AI Computer Cutout"
+        className="relative z-10 max-h-[85%] md:max-h-[92%] w-auto object-contain animate-hero-img-bob transition-all duration-300"
         style={{
-          filter: 'drop-shadow(0px 30px 60px rgba(0,0,0,0.15))',
+          filter: 'drop-shadow(0px 25px 45px rgba(0,0,0,0.22))',
         }}
       />
     </div>

@@ -14,11 +14,12 @@
     --bg-dark-surface: #141418;
   }
 
-  body {
+  html, body {
+    max-width: 100vw;
+    overflow-x: hidden !important;
     background-color: var(--bg-light);
     color: var(--text-primary);
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    overflow-x: hidden;
   }
 
   h1, h2, h3, .font-syne {

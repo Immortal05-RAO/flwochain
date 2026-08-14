@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowUpRight, TrendingUp, ChevronDown } from 'lucide-react';
 import { ThreeHeroCanvas } from './ThreeHeroCanvas';
 
@@ -7,25 +7,37 @@ interface HeroSectionProps {
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    // Trigger hero load entrance animation after DOM mount
+    const timer = setTimeout(() => setIsLoaded(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <section
       id="hero"
-      className="relative min-h-screen w-full bg-[#EBEBEB] text-[#111111] pt-28 sm:pt-36 md:pt-40 pb-16 px-5 sm:px-8 md:px-12 lg:px-16 flex flex-col justify-between overflow-hidden selection:bg-[#E85500] selection:text-white z-0"
+      className="relative min-h-screen w-full bg-[#EBEBEB] text-[#111111] pt-28 sm:pt-36 md:pt-40 pb-16 px-5 sm:px-8 md:px-12 lg:px-16 flex flex-col justify-between overflow-hidden selection:bg-[#E85500] selection:text-white"
     >
-      {/* FIX 2: FLOWCHAIN WATERMARK — HARD OVERRIDE (Warm Light Gray #D4D4CF, Opacity 1, Z-Index 1) */}
+      {/* FLOWCHAIN WATERMARK — SUBTLE WALLPAPER DEPTH (#C8C8C3, Opacity 0.55, Z-Index 0) */}
       <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-syne font-black uppercase text-[#D4D4CF] tracking-[-0.02em] whitespace-nowrap pointer-events-none select-none z-[1] overflow-visible"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-syne font-black uppercase text-[#C8C8C3] tracking-[0.05em] whitespace-nowrap pointer-events-none select-none z-0"
         style={{
-          fontSize: 'clamp(80px, 13vw, 200px)',
+          fontSize: 'clamp(60px, 8vw, 130px)',
           fontWeight: 900,
-          opacity: 1,
+          opacity: 0.55,
         }}
       >
         FLOWCHAIN
       </div>
 
-      {/* Top Bar Metadata */}
-      <div className="relative z-10 flex items-center justify-between font-mono text-xs text-[#666666] mb-6">
+      {/* Top Bar Metadata (Z-Index 10) */}
+      <div
+        className={`relative z-10 flex items-center justify-between font-mono text-xs text-[#666666] mb-6 transition-all duration-500 ${
+          isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
+        }`}
+      >
         <div className="flex items-center gap-3">
           <span className="px-2.5 py-1 bg-black/5 rounded-md font-semibold text-[#111111]">
             [1 / 7]
@@ -45,20 +57,51 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
 
       {/* Main Grid: Single Column on Mobile (<=768px), 12 Columns on Desktop */}
       <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center my-auto max-w-7xl mx-auto w-full">
-        {/* Headline & CTAs */}
-        <div className="lg:col-span-7 flex flex-col items-start gap-6">
+        {/* Headline & CTAs (Z-Index 2 for Headline, Z-Index 4 for CTAs) */}
+        <div className="lg:col-span-7 flex flex-col items-start gap-6 relative z-2">
           <h1 className="font-syne font-extrabold text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[76px] leading-[0.98] tracking-tight text-[#111111] break-words">
-            BUILDING <br />
-            DIGITAL SYSTEMS <br />
-            <span className="text-[#E85500]">THAT FLOW.</span>
+            <span
+              className={`block transition-all duration-500 ease-out ${
+                isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+              }`}
+              style={{ transitionDelay: '150ms' }}
+            >
+              BUILDING
+            </span>
+            <span
+              className={`block transition-all duration-500 ease-out ${
+                isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+              }`}
+              style={{ transitionDelay: '250ms' }}
+            >
+              DIGITAL SYSTEMS
+            </span>
+            <span
+              className={`block text-[#E85500] transition-all duration-500 ease-out ${
+                isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+              }`}
+              style={{ transitionDelay: '350ms' }}
+            >
+              THAT FLOW.
+            </span>
           </h1>
 
-          <p className="font-sans text-sm sm:text-base md:text-lg text-[#444444] max-w-xl leading-relaxed font-normal">
+          <p
+            className={`font-sans text-sm sm:text-base md:text-lg text-[#444444] max-w-xl leading-relaxed font-normal transition-all duration-500 ${
+              isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+            }`}
+            style={{ transitionDelay: '450ms' }}
+          >
             We craft AI automation, intelligent workflows, and premium digital experiences that drive real business growth.
           </p>
 
-          {/* Buttons: Stacked Full-Width on Mobile, Inline Row on Desktop */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto pt-2">
+          {/* Buttons: Stacked Full-Width on Mobile, Inline Row on Desktop (Z-Index 4) */}
+          <div
+            className={`flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto pt-2 relative z-4 transition-all duration-500 ${
+              isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+            }`}
+            style={{ transitionDelay: '550ms' }}
+          >
             <button
               onClick={onOpenBooking}
               className="w-full sm:w-auto min-h-[48px] px-8 py-3.5 bg-[#E85500] hover:bg-[#D44B00] text-white font-mono text-xs font-semibold uppercase tracking-wider rounded-full shadow-xl transition-all duration-300 flex items-center justify-center gap-3"
@@ -76,14 +119,24 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
           </div>
         </div>
 
-        {/* FIX 1: Hero Orange Retro All-In-One Computer Image Component & Stat Callout */}
-        <div className="lg:col-span-5 flex flex-col items-center lg:items-end relative w-full z-20">
-          <div className="w-full max-w-[360px] sm:max-w-md mx-auto">
+        {/* User Transparent Computer PNG Image Asset (Z-Index 3) & Stat Callout Card (Z-Index 4) */}
+        <div className="lg:col-span-5 flex flex-col items-center lg:items-end relative w-full z-3">
+          <div
+            className={`w-full max-w-[360px] sm:max-w-md mx-auto transition-all duration-700 ease-out ${
+              isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+            }`}
+            style={{ transitionDelay: '600ms' }}
+          >
             <ThreeHeroCanvas />
           </div>
 
-          {/* Stat Callout Card */}
-          <div className="w-full max-w-xs mx-auto lg:mx-0 mt-4 lg:absolute lg:top-0 lg:right-2 z-30 glass-card-light p-4 sm:p-5 rounded-2xl shadow-xl border border-black/10">
+          {/* Stat Callout Card (Z-Index 4) */}
+          <div
+            className={`w-full max-w-xs mx-auto lg:mx-0 mt-4 lg:absolute lg:top-0 lg:right-2 z-4 glass-card-light p-4 sm:p-5 rounded-2xl shadow-xl border border-black/10 transition-all duration-600 ease-out ${
+              isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'
+            }`}
+            style={{ transitionDelay: '800ms' }}
+          >
             <div className="flex items-center justify-between gap-3 mb-1">
               <span className="font-syne font-black text-2xl sm:text-3xl text-[#111111]">
                 340%

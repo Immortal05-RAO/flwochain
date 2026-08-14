@@ -1,5 +1,97 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ArrowRight, Sparkles } from 'lucide-react';
+
+interface ChapterCardProps {
+  ch: {
+    word: string;
+    subtitle: string;
+    desc: string;
+    bgColor: string;
+    badge: string;
+    isDark?: boolean;
+  };
+  index: number;
+}
+
+const MobileChapterCard: React.FC<ChapterCardProps> = ({ ch, index }) => {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    if (cardRef.current) {
+      observer.observe(cardRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={cardRef}
+      className={`rounded-3xl p-6 border border-black/10 flex flex-col items-center text-center space-y-4 transition-all duration-500 ease-out overflow-hidden w-full max-w-full ${
+        ch.bgColor
+      } ${ch.isDark ? 'text-white border-white/10' : 'text-[#111111]'} ${
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+      }`}
+      style={{ transitionDelay: `${index * 80}ms` }}
+    >
+      {/* Centered Badge Label */}
+      <span
+        className={`font-mono text-[11px] font-bold uppercase tracking-widest text-[#E85500] px-3 py-1 bg-[#E85500]/10 rounded-full mx-auto transition-all duration-400 ${
+          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'
+        }`}
+      >
+        {ch.badge}
+      </span>
+
+      {/* Fluid Scaled Chapter Word (NO HORIZONTAL OVERFLOW) */}
+      <div className="w-full overflow-hidden flex justify-center items-center py-2">
+        <h4
+          className={`font-syne font-black tracking-tight leading-none uppercase select-none text-center transition-all duration-500 ${
+            isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
+          }`}
+          style={{
+            fontSize: 'clamp(28px, 8.5vw, 140px)',
+            wordBreak: 'keep-all',
+            whiteSpace: 'nowrap',
+            maxWidth: '100%',
+            transitionDelay: '100ms',
+          }}
+        >
+          {ch.word}
+        </h4>
+      </div>
+
+      <p
+        className={`font-syne font-bold text-base sm:text-lg leading-snug transition-all duration-400 ${
+          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+        }`}
+        style={{ transitionDelay: '180ms' }}
+      >
+        {ch.subtitle}
+      </p>
+
+      <p
+        className={`font-sans text-xs opacity-80 max-w-xs leading-relaxed transition-all duration-400 ${
+          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+        }`}
+        style={{ transitionDelay: '260ms' }}
+      >
+        {ch.desc}
+      </p>
+    </div>
+  );
+};
 
 export const StoryNarrativeSection: React.FC = () => {
   const [activeChapter, setActiveChapter] = useState(0);
@@ -48,7 +140,7 @@ export const StoryNarrativeSection: React.FC = () => {
   return (
     <section
       id="story"
-      className="relative w-full py-16 sm:py-28 px-5 sm:px-8 md:px-12 lg:px-16 selection:bg-[#E85500] selection:text-white"
+      className="relative w-full py-16 sm:py-28 px-5 sm:px-8 md:px-12 lg:px-16 selection:bg-[#E85500] selection:text-white max-w-[100vw] overflow-x-hidden"
     >
       {/* DESKTOP INTERACTIVE TAB DISPLAY (md:block) */}
       <div
@@ -87,9 +179,18 @@ export const StoryNarrativeSection: React.FC = () => {
               {current.badge}
             </span>
 
-            <h2 className="font-syne font-black text-6xl lg:text-8xl xl:text-9xl leading-none tracking-tighter uppercase">
-              {current.word}
-            </h2>
+            <div className="w-full overflow-hidden">
+              <h2
+                className="font-syne font-black leading-none tracking-tighter uppercase select-none"
+                style={{
+                  fontSize: 'clamp(48px, 8.5vw, 140px)',
+                  wordBreak: 'keep-all',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {current.word}
+              </h2>
+            </div>
 
             <p className="font-syne font-bold text-2xl lg:text-3xl max-w-3xl leading-snug">
               {current.subtitle}
@@ -114,9 +215,9 @@ export const StoryNarrativeSection: React.FC = () => {
         </div>
       </div>
 
-      {/* MOBILE STACKED VERTICAL CHAPTERS (md:hidden) */}
-      <div className="md:hidden space-y-12">
-        <div className="text-center mb-8">
+      {/* MOBILE STACKED VERTICAL CHAPTERS WITH INTERSECTIONOBSERVER ENTRANCES (md:hidden) */}
+      <div className="md:hidden space-y-8 w-full max-w-full">
+        <div className="text-center mb-6">
           <div className="inline-flex items-center gap-2 font-mono text-xs text-[#E85500] uppercase tracking-widest mb-2 font-semibold">
             <Sparkles className="w-4 h-4" />
             <span>Narrative Architecture</span>
@@ -126,29 +227,8 @@ export const StoryNarrativeSection: React.FC = () => {
           </h3>
         </div>
 
-        {chapters.map((ch) => (
-          <div
-            key={ch.word}
-            className={`rounded-3xl p-6 border border-black/10 flex flex-col items-center text-center space-y-4 ${
-              ch.bgColor
-            } ${ch.isDark ? 'text-white border-white/10' : 'text-[#111111]'}`}
-          >
-            <span className="font-mono text-[11px] font-bold uppercase tracking-widest text-[#E85500] px-3 py-1 bg-[#E85500]/10 rounded-full">
-              {ch.badge}
-            </span>
-
-            <h4 className="font-syne font-black text-4xl sm:text-5xl tracking-tight leading-none uppercase">
-              {ch.word}
-            </h4>
-
-            <p className="font-syne font-bold text-lg leading-snug">
-              {ch.subtitle}
-            </p>
-
-            <p className="font-sans text-xs opacity-80 max-w-xs leading-relaxed">
-              {ch.desc}
-            </p>
-          </div>
+        {chapters.map((ch, idx) => (
+          <MobileChapterCard key={ch.word} ch={ch} index={idx} />
         ))}
       </div>
     </section>

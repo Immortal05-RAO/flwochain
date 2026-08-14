@@ -1,9 +1,79 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ArrowUpRight, Search, Cpu, Rocket } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
 interface HowItWorksSectionProps {
   onOpenBooking: () => void;
 }
+
+interface StepCardProps {
+  step: {
+    num: string;
+    title: string;
+    desc: string;
+    icon: LucideIcon;
+  };
+  idx: number;
+}
+
+const StepCard: React.FC<StepCardProps> = ({ step, idx }) => {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    if (cardRef.current) {
+      observer.observe(cardRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  const Icon = step.icon;
+
+  return (
+    <div
+      ref={cardRef}
+      className={`relative bg-white/80 rounded-3xl p-6 sm:p-8 border border-black/10 shadow-lg hover:border-[#E85500] transition-all duration-500 ease-out flex flex-col justify-between ${
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+      }`}
+      style={{ transitionDelay: `${idx * 100}ms` }}
+    >
+      <div>
+        <div className="flex items-center justify-between mb-6">
+          <span className="font-syne font-black text-4xl sm:text-5xl text-[#111111]/20">
+            {step.num}
+          </span>
+          <div className="w-10 h-10 rounded-2xl bg-[#E85500]/10 text-[#E85500] flex items-center justify-center font-bold">
+            <Icon className="w-5 h-5" />
+          </div>
+        </div>
+
+        <h3 className="font-syne font-extrabold text-xl sm:text-2xl text-[#111111] mb-3">
+          {step.title}
+        </h3>
+
+        <p className="text-xs sm:text-sm text-[#555555] leading-relaxed">
+          {step.desc}
+        </p>
+      </div>
+
+      <div className="pt-6 mt-6 border-t border-black/10 flex items-center justify-between text-xs font-mono text-[#888888]">
+        <span>PHASE {step.num}</span>
+        <span className="text-[#E85500] font-bold">STEP {idx + 1}/3</span>
+      </div>
+    </div>
+  );
+};
 
 export const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ onOpenBooking }) => {
   const steps = [
@@ -50,44 +120,14 @@ export const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ onOpenBook
           </p>
         </div>
 
-        {/* 3 STEPS STACK (Vertical Column on Mobile with Vertical Connector Line, 3 Columns Desktop) */}
+        {/* 3 STEPS STACK WITH SCROLL ENTRANCE ANIMATIONS */}
         <div className="relative grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
           {/* Vertical Dotted Connector Line (Mobile) */}
           <div className="absolute left-6 top-8 bottom-8 w-0.5 border-l-2 border-dashed border-[#E85500]/30 lg:hidden" />
 
-          {steps.map((step, idx) => {
-            const Icon = step.icon;
-            return (
-              <div
-                key={step.num}
-                className="relative bg-white/80 rounded-3xl p-6 sm:p-8 border border-black/10 shadow-lg hover:border-[#E85500] transition-all duration-300 flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-6">
-                    <span className="font-syne font-black text-4xl sm:text-5xl text-[#111111]/20">
-                      {step.num}
-                    </span>
-                    <div className="w-10 h-10 rounded-2xl bg-[#E85500]/10 text-[#E85500] flex items-center justify-center font-bold">
-                      <Icon className="w-5 h-5" />
-                    </div>
-                  </div>
-
-                  <h3 className="font-syne font-extrabold text-xl sm:text-2xl text-[#111111] mb-3">
-                    {step.title}
-                  </h3>
-
-                  <p className="text-xs sm:text-sm text-[#555555] leading-relaxed">
-                    {step.desc}
-                  </p>
-                </div>
-
-                <div className="pt-6 mt-6 border-t border-black/10 flex items-center justify-between text-xs font-mono text-[#888888]">
-                  <span>PHASE {step.num}</span>
-                  <span className="text-[#E85500] font-bold">STEP {idx + 1}/3</span>
-                </div>
-              </div>
-            );
-          })}
+          {steps.map((step, idx) => (
+            <StepCard key={step.num} step={step} idx={idx} />
+          ))}
         </div>
 
         {/* Bottom CTA Button */}

@@ -1,9 +1,91 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 
 interface SelectedWorkSectionProps {
   onOpenBooking: () => void;
 }
+
+interface ProjectCardProps {
+  proj: {
+    title: string;
+    category: string;
+    metrics: string;
+    image: string;
+    desc: string;
+  };
+  onOpenBooking: () => void;
+  idx: number;
+}
+
+const ProjectCard: React.FC<ProjectCardProps> = ({ proj, onOpenBooking, idx }) => {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    if (cardRef.current) {
+      observer.observe(cardRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={cardRef}
+      onClick={onOpenBooking}
+      className={`bg-white/80 rounded-3xl p-5 sm:p-6 border border-black/10 shadow-lg hover:border-[#E85500] transition-all duration-500 ease-out group cursor-pointer flex flex-col justify-between ${
+        isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+      }`}
+      style={{ transitionDelay: `${idx * 120}ms` }}
+    >
+      {/* 16:9 Image Aspect Ratio */}
+      <div>
+        <div className="relative w-full aspect-video rounded-2xl overflow-hidden mb-5 bg-black/10">
+          <img
+            src={proj.image}
+            alt={proj.title}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+          <span className="absolute top-3 right-3 px-2.5 py-1 bg-black/80 backdrop-blur-md text-white font-mono text-[10px] font-bold rounded-full uppercase">
+            {proj.metrics}
+          </span>
+        </div>
+
+        <div className="space-y-2">
+          <span className="text-[#E85500] font-mono text-[10px] font-bold uppercase tracking-wider block">
+            {proj.category}
+          </span>
+
+          <h3 className="font-syne font-extrabold text-xl sm:text-2xl text-[#111111] flex items-center justify-between">
+            <span>{proj.title}</span>
+          </h3>
+
+          <p className="text-xs text-[#555555] leading-relaxed">
+            {proj.desc}
+          </p>
+        </div>
+      </div>
+
+      {/* Tappable 44x44 Action Button */}
+      <div className="pt-4 mt-4 border-t border-black/10 flex items-center justify-between">
+        <span className="font-mono text-xs text-[#888888] uppercase">Explore System</span>
+        <div className="min-w-[44px] min-h-[44px] rounded-full bg-black/5 text-[#111111] group-hover:bg-[#E85500] group-hover:text-white flex items-center justify-center transition-colors">
+          <ArrowUpRight className="w-5 h-5" />
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ onOpenBooking }) => {
   const projects = [
@@ -53,50 +135,10 @@ export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ onOpen
           </p>
         </div>
 
-        {/* Project Cards Grid: Single Column Stack on Mobile (<=768px), 3 Columns Desktop */}
+        {/* Project Cards Grid with Scroll Entrance Animations */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
-          {projects.map((proj) => (
-            <div
-              key={proj.title}
-              onClick={onOpenBooking}
-              className="bg-white/80 rounded-3xl p-5 sm:p-6 border border-black/10 shadow-lg hover:border-[#E85500] transition-all duration-300 group cursor-pointer flex flex-col justify-between"
-            >
-              {/* 16:9 Image Aspect Ratio */}
-              <div>
-                <div className="relative w-full aspect-video rounded-2xl overflow-hidden mb-5 bg-black/10">
-                  <img
-                    src={proj.image}
-                    alt={proj.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <span className="absolute top-3 right-3 px-2.5 py-1 bg-black/80 backdrop-blur-md text-white font-mono text-[10px] font-bold rounded-full uppercase">
-                    {proj.metrics}
-                  </span>
-                </div>
-
-                <div className="space-y-2">
-                  <span className="text-[#E85500] font-mono text-[10px] font-bold uppercase tracking-wider block">
-                    {proj.category}
-                  </span>
-
-                  <h3 className="font-syne font-extrabold text-xl sm:text-2xl text-[#111111] flex items-center justify-between">
-                    <span>{proj.title}</span>
-                  </h3>
-
-                  <p className="text-xs text-[#555555] leading-relaxed">
-                    {proj.desc}
-                  </p>
-                </div>
-              </div>
-
-              {/* Tappable 44x44 Action Button */}
-              <div className="pt-4 mt-4 border-t border-black/10 flex items-center justify-between">
-                <span className="font-mono text-xs text-[#888888] uppercase">Explore System</span>
-                <div className="min-w-[44px] min-h-[44px] rounded-full bg-black/5 text-[#111111] group-hover:bg-[#E85500] group-hover:text-white flex items-center justify-center transition-colors">
-                  <ArrowUpRight className="w-5 h-5" />
-                </div>
-              </div>
-            </div>
+          {projects.map((proj, idx) => (
+            <ProjectCard key={proj.title} proj={proj} onOpenBooking={onOpenBooking} idx={idx} />
           ))}
         </div>
       </div>
