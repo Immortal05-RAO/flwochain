@@ -2,25 +2,30 @@ import React, { useEffect, useRef, useState } from 'react';
 
 export const CustomCursor: React.FC = () => {
   const [isHovered, setIsHovered] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
 
-  // Use refs to prevent re-render thrashing and animation loop desync
-  const posRef = useRef({ x: -100, y: -100 });
-  const trailingRef = useRef({ x: -100, y: -100 });
+  // Position refs for 1:1 hardware tracking with zero React re-render lag
+  const mousePos = useRef({ x: -100, y: -100 });
+  const ringPos = useRef({ x: -100, y: -100 });
 
-  const innerDotRef = useRef<HTMLDivElement>(null);
-  const outerRingRef = useRef<HTMLDivElement>(null);
+  const dotRef = useRef<HTMLDivElement>(null);
+  const ringRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Only enable custom cursor on fine pointer devices (desktops)
+    // Only activate custom cursor on desktop fine pointer devices
     const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
     if (isTouchDevice) return;
 
     document.body.classList.add('custom-cursor-active');
 
+    // 1. Direct hardware-synchronized mousemove listener (0ms latency update)
     const handleMouseMove = (e: MouseEvent) => {
-      posRef.current = { x: e.clientX, y: e.clientY };
-      if (!isVisible) setIsVisible(true);
+      mousePos.current.x = e.clientX;
+      mousePos.current.y = e.clientY;
+
+      // Update inner dot immediately on hardware mousemove (1:1 instant sync)
+      if (dotRef.current) {
+        dotRef.current.style.transform = `translate3d(${e.clientX - 6}px, ${e.clientY - 6}px, 0)`;
+      }
     };
 
     const handleMouseOver = (e: MouseEvent) => {
@@ -42,27 +47,17 @@ export const CustomCursor: React.FC = () => {
       }
     };
 
-    const handleMouseLeave = () => {
-      setIsVisible(false);
-    };
-
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
     window.addEventListener('mouseover', handleMouseOver, { passive: true });
-    document.addEventListener('mouseleave', handleMouseLeave);
 
-    // Single 60fps requestAnimationFrame loop for ultra-smooth tracking
+    // 2. High-speed 60fps RAF loop for smooth trailing ring (0.75 lerp = zero lag)
     let animId: number;
     const animate = () => {
-      // Lerp trailing ring towards mouse position
-      trailingRef.current.x += (posRef.current.x - trailingRef.current.x) * 0.35;
-      trailingRef.current.y += (posRef.current.y - trailingRef.current.y) * 0.35;
+      ringPos.current.x += (mousePos.current.x - ringPos.current.x) * 0.75;
+      ringPos.current.y += (mousePos.current.y - ringPos.current.y) * 0.75;
 
-      if (innerDotRef.current) {
-        innerDotRef.current.style.transform = `translate3d(${posRef.current.x - 6}px, ${posRef.current.y - 6}px, 0)`;
-      }
-
-      if (outerRingRef.current) {
-        outerRingRef.current.style.transform = `translate3d(${trailingRef.current.x - 18}px, ${trailingRef.current.y - 18}px, 0)`;
+      if (ringRef.current) {
+        ringRef.current.style.transform = `translate3d(${ringPos.current.x - 18}px, ${ringPos.current.y - 18}px, 0)`;
       }
 
       animId = requestAnimationFrame(animate);
@@ -75,26 +70,23 @@ export const CustomCursor: React.FC = () => {
       document.body.classList.remove('custom-cursor-active');
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseover', handleMouseOver);
-      document.removeEventListener('mouseleave', handleMouseLeave);
     };
-  }, [isVisible]);
-
-  if (!isVisible) return null;
+  }, []); // Run ONCE on mount so listeners are never torn down!
 
   return (
     <>
-      {/* Inner Orange Dot */}
+      {/* Inner Orange Dot - Instant 1:1 Hardware Track */}
       <div
-        ref={innerDotRef}
-        className={`fixed top-0 left-0 w-3 h-3 bg-[#E85500] rounded-full pointer-events-none z-[9999] will-change-transform transition-scale duration-200 ${
+        ref={dotRef}
+        className={`fixed top-0 left-0 w-3 h-3 bg-[#E85500] rounded-full pointer-events-none z-[9999] will-change-transform transition-scale duration-150 ${
           isHovered ? 'scale-[2.2] shadow-orange-500/80 shadow-lg' : 'scale-100 shadow-orange-500/40 shadow-sm'
         }`}
       />
 
-      {/* Trailing Ring */}
+      {/* Trailing Outer Ring - High-Speed Fast Lerp */}
       <div
-        ref={outerRingRef}
-        className={`fixed top-0 left-0 w-9 h-9 rounded-full pointer-events-none z-[9998] will-change-transform border transition-all duration-200 ${
+        ref={ringRef}
+        className={`fixed top-0 left-0 w-9 h-9 rounded-full pointer-events-none z-[9998] will-change-transform border transition-all duration-150 ${
           isHovered
             ? 'border-[#E85500] bg-[#E85500]/15 scale-125'
             : 'border-black/30 bg-transparent scale-100'
