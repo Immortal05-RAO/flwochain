@@ -1,109 +1,98 @@
 import React from 'react';
 import { ArrowUpRight } from 'lucide-react';
 
-interface SelectedWorkProps {
+interface SelectedWorkSectionProps {
   onOpenBooking: () => void;
 }
 
-export const SelectedWorkSection: React.FC<SelectedWorkProps> = ({ onOpenBooking }) => {
+export const SelectedWorkSection: React.FC<SelectedWorkSectionProps> = ({ onOpenBooking }) => {
   const projects = [
     {
-      id: 'apex-capital',
-      title: 'Apex Capital',
-      category: 'AI Automation • Portfolio CRM',
-      result: '4.2x Faster Deal Flow',
-      desc: 'Automated deal sourcing, lead scoring, and instant WhatsApp founder updates.',
-      bgGradient: 'from-orange-600/30 to-amber-900/40',
-      accentColor: '#E85500',
+      title: 'Aetheria Systems',
+      category: 'AI Automation & CRM',
+      metrics: '+340% Lead Velocity',
+      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80',
+      desc: 'Autonomous enterprise CRM pipeline with instant WhatsApp qualification.',
     },
     {
-      id: 'veloce-mobility',
-      title: 'Veloce Mobility',
-      category: 'Voice Receptionist • Logistics',
-      result: '100% Calls Answered',
-      desc: '24/7 autonomous dispatch AI voice agent handling 1,200+ driver inquiries daily.',
-      bgGradient: 'from-blue-600/30 to-cyan-900/40',
-      accentColor: '#00D2FF',
+      title: 'Kuro Studio',
+      category: 'High-Conversion Web Design',
+      metrics: '4.8x Conversion Rate',
+      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80',
+      desc: 'Editorial WebGL brand identity and interactive sales portal.',
     },
     {
-      id: 'aura-health',
-      title: 'Aura Health Clinics',
-      category: 'WhatsApp Booking • Patient CRM',
-      result: '+$142,000 Mo. Revenue',
-      desc: 'Automated appointment scheduling & reminder flow reducing no-shows by 84%.',
-      bgGradient: 'from-emerald-600/30 to-teal-900/40',
-      accentColor: '#25D366',
-    },
-    {
-      id: 'kinetix-commerce',
-      title: 'Kinetix Enterprise',
-      category: 'Website Design • Custom System',
-      result: '+310% Conversion Lift',
-      desc: 'High-speed editorial e-commerce platform integrated directly into inventory webhooks.',
-      bgGradient: 'from-purple-600/30 to-indigo-900/40',
-      accentColor: '#A855F7',
+      title: 'Vanguard Health',
+      category: 'AI Voice Receptionist',
+      metrics: '100% Inbound Answered',
+      image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1200&q=80',
+      desc: '24/7 HIPAA-compliant voice receptionist booking 80+ patient appointments daily.',
     },
   ];
 
   return (
     <section
       id="work"
-      className="relative w-full bg-[#EBEBEB] text-[#111111] py-28 px-6 md:px-12 lg:px-16 selection:bg-[#E85500] selection:text-white border-t border-black/10"
+      className="relative w-full bg-[#EBEBEB] text-[#111111] py-16 sm:py-28 px-5 sm:px-8 md:px-12 lg:px-16 selection:bg-[#E85500] selection:text-white"
     >
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-20">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 sm:mb-16">
           <div>
-            <span className="font-mono text-xs text-[#E85500] uppercase tracking-widest block mb-2 font-semibold">
-              [ PORTFOLIO ]
-            </span>
-            <h2 className="font-syne font-extrabold text-4xl sm:text-6xl text-[#111111] tracking-tight">
-              SELECTED WORK.
+            <div className="inline-block px-3 py-1 bg-[#E85500] text-white font-mono text-[11px] font-bold uppercase rounded-md tracking-wider mb-3">
+              SELECTED WORK
+            </div>
+            <h2 className="font-syne font-extrabold text-3xl sm:text-5xl lg:text-6xl text-[#111111] tracking-tight leading-[0.98]">
+              DIGITAL SYSTEMS <br />
+              <span className="text-[#E85500]">IN ACTION.</span>
             </h2>
           </div>
-          <p className="font-sans text-sm sm:text-base text-[#666666] max-w-md leading-relaxed">
-            Case studies of digital systems engineered for high-growth enterprises.
+
+          <p className="font-sans text-xs sm:text-base text-[#666666] max-w-sm leading-relaxed">
+            Real operational transformations engineered for ambitious digital brands.
           </p>
         </div>
 
-        {/* 4 Projects Grid with 3D Tilt Hover */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-          {projects.map((project) => (
+        {/* Project Cards Grid: Single Column Stack on Mobile (<=768px), 3 Columns Desktop */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+          {projects.map((proj) => (
             <div
-              key={project.id}
+              key={proj.title}
               onClick={onOpenBooking}
-              className="glass-card-light rounded-3xl p-8 border border-black/10 flex flex-col justify-between min-h-[420px] relative overflow-hidden group hover:border-[#E85500] transition-all duration-500 hover:-translate-y-3 shadow-2xl interactive-hover cursor-pointer"
+              className="bg-white/80 rounded-3xl p-5 sm:p-6 border border-black/10 shadow-lg hover:border-[#E85500] transition-all duration-300 group cursor-pointer flex flex-col justify-between"
             >
-              {/* Card Dynamic Gradient Accent Background */}
-              <div
-                className={`absolute inset-0 bg-gradient-to-br ${project.bgGradient} opacity-20 group-hover:opacity-40 transition-opacity duration-500 pointer-events-none`}
-              />
-
-              <div className="relative z-10">
-                <div className="flex items-center justify-between mb-4">
-                  <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#666666]">
-                    {project.category}
-                  </span>
-                  <span
-                    className="font-mono text-xs font-extrabold px-3 py-1 bg-black/5 rounded-full text-[#111111]"
-                    style={{ color: project.accentColor }}
-                  >
-                    {project.result}
+              {/* 16:9 Image Aspect Ratio */}
+              <div>
+                <div className="relative w-full aspect-video rounded-2xl overflow-hidden mb-5 bg-black/10">
+                  <img
+                    src={proj.image}
+                    alt={proj.title}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <span className="absolute top-3 right-3 px-2.5 py-1 bg-black/80 backdrop-blur-md text-white font-mono text-[10px] font-bold rounded-full uppercase">
+                    {proj.metrics}
                   </span>
                 </div>
 
-                <h3 className="font-syne font-black text-3xl sm:text-4xl text-[#111111] mb-3 group-hover:text-[#E85500] transition-colors">
-                  {project.title}
-                </h3>
+                <div className="space-y-2">
+                  <span className="text-[#E85500] font-mono text-[10px] font-bold uppercase tracking-wider block">
+                    {proj.category}
+                  </span>
 
-                <p className="font-sans text-sm text-[#555555] max-w-md leading-relaxed">
-                  {project.desc}
-                </p>
+                  <h3 className="font-syne font-extrabold text-xl sm:text-2xl text-[#111111] flex items-center justify-between">
+                    <span>{proj.title}</span>
+                  </h3>
+
+                  <p className="text-xs text-[#555555] leading-relaxed">
+                    {proj.desc}
+                  </p>
+                </div>
               </div>
 
-              {/* Card Footer with Hover Arrow */}
-              <div className="relative z-10 flex items-center justify-between pt-8 border-t border-black/10 font-mono text-xs text-[#111111] font-bold uppercase tracking-wider">
-                <span>View System Specs</span>
-                <div className="w-10 h-10 rounded-full bg-[#111111] text-white flex items-center justify-center group-hover:bg-[#E85500] group-hover:scale-110 transition-all duration-300">
+              {/* Tappable 44x44 Action Button */}
+              <div className="pt-4 mt-4 border-t border-black/10 flex items-center justify-between">
+                <span className="font-mono text-xs text-[#888888] uppercase">Explore System</span>
+                <div className="min-w-[44px] min-h-[44px] rounded-full bg-black/5 text-[#111111] group-hover:bg-[#E85500] group-hover:text-white flex items-center justify-center transition-colors">
                   <ArrowUpRight className="w-5 h-5" />
                 </div>
               </div>

@@ -19,11 +19,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 30) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+      setScrolled(window.scrollY > 30);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -37,10 +33,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             scrolled ? 'shadow-2xl border-black/15 bg-[#EBEBEB]/90 scale-[0.99]' : ''
           }`}
         >
-          {/* Logo (Wordmark + Geometric Mark) */}
+          {/* Logo (Left) */}
           <button
             onClick={onNavigateHome}
-            className="flex items-center gap-2.5 group interactive-hover text-left"
+            className="flex items-center gap-2.5 group text-left"
           >
             <div className="w-8 h-8 rounded-lg bg-[#E85500] flex items-center justify-center text-white font-bold text-sm tracking-widest shadow-md transition-transform duration-300 group-hover:rotate-12">
               <span className="font-syne">F</span>
@@ -50,11 +46,11 @@ export const Navbar: React.FC<NavbarProps> = ({
             </span>
           </button>
 
-          {/* Desktop Links & Page Switchers */}
+          {/* Desktop Links (Hidden on Mobile) */}
           <div className="hidden md:flex items-center gap-6 text-xs uppercase font-mono tracking-wider text-[#444444]">
             <button
               onClick={onNavigateHome}
-              className={`relative py-1 transition-colors group interactive-hover ${
+              className={`relative py-1 transition-colors ${
                 currentPage === 'home' ? 'text-[#E85500] font-bold' : 'hover:text-[#E85500]'
               }`}
             >
@@ -66,7 +62,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <button
               onClick={onNavigateServices}
-              className={`relative py-1 transition-colors flex items-center gap-1.5 group interactive-hover ${
+              className={`relative py-1 transition-colors flex items-center gap-1.5 ${
                 currentPage === 'services' ? 'text-[#E85500] font-bold' : 'hover:text-[#E85500]'
               }`}
             >
@@ -120,43 +116,61 @@ export const Navbar: React.FC<NavbarProps> = ({
             </a>
           </div>
 
-          {/* Action CTA */}
+          {/* Desktop Book a Call CTA (Hidden on Mobile) */}
           <div className="hidden md:flex items-center gap-3">
             <button
               onClick={onOpenBooking}
-              className="flex items-center gap-2 px-5 py-2.5 bg-[#E85500] hover:bg-[#D44B00] text-white text-xs font-mono font-semibold uppercase tracking-wider rounded-full shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-orange-500/30 interactive-hover"
+              className="flex items-center gap-2 px-5 py-2.5 bg-[#E85500] hover:bg-[#D44B00] text-white text-xs font-mono font-semibold uppercase tracking-wider rounded-full shadow-lg transition-all duration-300 hover:scale-105"
             >
               <span>Book a Call</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
             </button>
           </div>
 
-          {/* Mobile Hamburger Toggle */}
+          {/* Mobile Hamburger Icon (Right) */}
           <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 rounded-full bg-black/5 text-[#111111] hover:bg-[#E85500] hover:text-white transition-colors"
-            aria-label="Toggle Navigation Menu"
+            onClick={() => setMobileMenuOpen(true)}
+            className="md:hidden min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full bg-black/5 text-[#111111] hover:bg-[#E85500] hover:text-white transition-colors"
+            aria-label="Open Navigation Menu"
           >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            <Menu className="w-6 h-6" />
           </button>
         </nav>
       </header>
 
-      {/* Mobile Full-Screen Overlay */}
+      {/* Full-Screen Dark Overlay Menu (Mobile Only) */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-[90] bg-[#EBEBEB] flex flex-col justify-between px-8 pt-28 pb-12 transition-all duration-500 md:hidden">
-          <div className="flex flex-col gap-6">
-            <div className="w-12 h-1 bg-[#E85500] rounded-full mb-4 animate-pulse" />
+        <div className="fixed inset-0 z-[999] bg-[#0A0A0C] text-white flex flex-col justify-between p-6 sm:p-8 animate-fade-in md:hidden">
+          {/* Header Bar inside Overlay */}
+          <div className="flex items-center justify-between border-b border-white/10 pb-4">
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-lg bg-[#E85500] flex items-center justify-center text-white font-bold text-xs">
+                F
+              </div>
+              <span className="font-syne font-extrabold text-base tracking-tight">
+                FLOWCHAIN
+              </span>
+            </div>
 
+            <button
+              onClick={() => setMobileMenuOpen(false)}
+              className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full bg-white/10 text-white hover:bg-[#E85500] transition-colors"
+              aria-label="Close Overlay Menu"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
+
+          {/* Large Centered Navigation Links */}
+          <div className="flex flex-col items-center justify-center gap-8 my-auto font-syne text-3xl sm:text-4xl font-extrabold tracking-tight">
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
                 onNavigateHome();
               }}
-              className="font-syne text-4xl font-extrabold text-[#111111] hover:text-[#E85500] transition-colors text-left flex items-center justify-between border-b border-black/10 pb-3"
+              className="hover:text-[#E85500] transition-colors"
             >
-              <span>Home</span>
-              <span className="font-mono text-sm text-[#888888]">01</span>
+              Home
             </button>
 
             <button
@@ -164,13 +178,35 @@ export const Navbar: React.FC<NavbarProps> = ({
                 setMobileMenuOpen(false);
                 onNavigateServices();
               }}
-              className="font-syne text-4xl font-extrabold text-[#E85500] transition-colors text-left flex items-center justify-between border-b border-black/10 pb-3"
+              className="hover:text-[#E85500] transition-colors flex items-center gap-2"
             >
               <span>Services Lab</span>
-              <span className="font-mono text-xs bg-[#E85500] text-white px-2 py-0.5 rounded-full font-bold">
+              <span className="text-xs bg-[#E85500] text-white px-2 py-0.5 rounded-full font-mono font-bold">
                 DEMOS
               </span>
             </button>
+
+            <a
+              href="#explosion"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                if (currentPage !== 'home') onNavigateHome();
+              }}
+              className="hover:text-[#E85500] transition-colors"
+            >
+              Explosion
+            </a>
+
+            <a
+              href="#story"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                if (currentPage !== 'home') onNavigateHome();
+              }}
+              className="hover:text-[#E85500] transition-colors"
+            >
+              Story
+            </a>
 
             <a
               href="#work"
@@ -178,10 +214,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                 setMobileMenuOpen(false);
                 if (currentPage !== 'home') onNavigateHome();
               }}
-              className="font-syne text-4xl font-extrabold text-[#111111] hover:text-[#E85500] transition-colors flex items-center justify-between border-b border-black/10 pb-3"
+              className="hover:text-[#E85500] transition-colors"
             >
-              <span>Work</span>
-              <span className="font-mono text-sm text-[#888888]">03</span>
+              Work
             </a>
 
             <a
@@ -190,28 +225,27 @@ export const Navbar: React.FC<NavbarProps> = ({
                 setMobileMenuOpen(false);
                 if (currentPage !== 'home') onNavigateHome();
               }}
-              className="font-syne text-4xl font-extrabold text-[#111111] hover:text-[#E85500] transition-colors flex items-center justify-between border-b border-black/10 pb-3"
+              className="hover:text-[#E85500] transition-colors"
             >
-              <span>About</span>
-              <span className="font-mono text-sm text-[#888888]">04</span>
+              About
             </a>
           </div>
 
-          <div className="flex flex-col gap-4">
+          {/* Bottom Full-Width Solid Orange "Book a Call" Button */}
+          <div className="pt-4 border-t border-white/10 space-y-4">
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
                 onOpenBooking();
               }}
-              className="w-full py-4 bg-[#E85500] text-white font-mono font-bold text-sm uppercase tracking-wider rounded-full flex items-center justify-center gap-2 shadow-xl"
+              className="w-full min-h-[48px] bg-[#E85500] hover:bg-[#D44B00] text-white font-mono font-bold text-sm uppercase tracking-wider rounded-full flex items-center justify-center gap-2 shadow-xl"
             >
               <Sparkles className="w-4 h-4" />
-              <span>Book a Free Strategy Call</span>
+              <span>Book a Call</span>
             </button>
 
-            <div className="flex justify-between items-center text-xs font-mono text-[#666666] pt-4 border-t border-black/10">
-              <span>hello@flowchain.ai</span>
-              <span>© 2026 FLOWCHAIN</span>
+            <div className="text-center font-mono text-xs text-[#888888]">
+              hello@flowchain.ai • © 2026 FLOWCHAIN
             </div>
           </div>
         </div>

@@ -50,6 +50,18 @@
   background: #E85500;
 }
 
+/* Hide default cursor on desktop devices supporting fine pointer */
+@media (pointer: fine) {
+  body.custom-cursor-active,
+  body.custom-cursor-active a,
+  body.custom-cursor-active button,
+  body.custom-cursor-active [role="button"],
+  body.custom-cursor-active input,
+  body.custom-cursor-active textarea {
+    cursor: none !important;
+  }
+}
+
 
 
 /* Frosted Glass Navigation Pill */
