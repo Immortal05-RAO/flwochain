@@ -10,30 +10,18 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
   return (
     <section
       id="hero"
-      className="relative min-h-screen w-full bg-[#EBEBEB] text-[#111111] pt-28 sm:pt-36 md:pt-40 pb-16 px-5 sm:px-8 md:px-12 lg:px-16 flex flex-col justify-between overflow-hidden selection:bg-[#E85500] selection:text-white"
+      className="relative min-h-screen w-full bg-[#EBEBEB] text-[#111111] pt-28 sm:pt-36 md:pt-40 pb-16 px-5 sm:px-8 md:px-12 lg:px-16 flex flex-col justify-between overflow-hidden selection:bg-[#E85500] selection:text-white z-0"
     >
-      {/* Ghosted Vector SVG Watermark (High Visibility & Ghosted Contrast) */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-6xl px-4 pointer-events-none select-none overflow-hidden z-0">
-        <svg
-          className="w-full h-auto opacity-70 md:opacity-85 drop-shadow-md"
-          viewBox="0 0 1000 200"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <text
-            x="50%"
-            y="55%"
-            dominantBaseline="middle"
-            textAnchor="middle"
-            fill="#FFFFFF"
-            fontFamily="Syne, sans-serif"
-            fontWeight="900"
-            fontSize="145"
-            letterSpacing="-4"
-          >
-            FLOWCHAIN
-          </text>
-        </svg>
+      {/* FIX 2: FLOWCHAIN WATERMARK — HARD OVERRIDE (Warm Light Gray #D4D4CF, Opacity 1, Z-Index 1) */}
+      <div
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-syne font-black uppercase text-[#D4D4CF] tracking-[-0.02em] whitespace-nowrap pointer-events-none select-none z-[1] overflow-visible"
+        style={{
+          fontSize: 'clamp(80px, 13vw, 200px)',
+          fontWeight: 900,
+          opacity: 1,
+        }}
+      >
+        FLOWCHAIN
       </div>
 
       {/* Top Bar Metadata */}
@@ -88,15 +76,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBooking }) => {
           </div>
         </div>
 
-        {/* 3D Workstation & Stat Callout Card */}
-        <div className="lg:col-span-5 flex flex-col items-center lg:items-end relative w-full">
-          {/* 3D Central Workstation (Scaled to Viewport Bounds) */}
-          <div className="w-full max-w-[340px] sm:max-w-md mx-auto">
+        {/* FIX 1: Hero Orange Retro All-In-One Computer Image Component & Stat Callout */}
+        <div className="lg:col-span-5 flex flex-col items-center lg:items-end relative w-full z-20">
+          <div className="w-full max-w-[360px] sm:max-w-md mx-auto">
             <ThreeHeroCanvas />
           </div>
 
-          {/* Stat Callout Card (Moved Below 3D Canvas on Mobile, Centered) */}
-          <div className="w-full max-w-xs mx-auto lg:mx-0 mt-4 lg:absolute lg:top-0 lg:right-2 z-20 glass-card-light p-4 sm:p-5 rounded-2xl shadow-xl border border-black/10">
+          {/* Stat Callout Card */}
+          <div className="w-full max-w-xs mx-auto lg:mx-0 mt-4 lg:absolute lg:top-0 lg:right-2 z-30 glass-card-light p-4 sm:p-5 rounded-2xl shadow-xl border border-black/10">
             <div className="flex items-center justify-between gap-3 mb-1">
               <span className="font-syne font-black text-2xl sm:text-3xl text-[#111111]">
                 340%
