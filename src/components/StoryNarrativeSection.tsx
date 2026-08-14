@@ -89,7 +89,7 @@ export const StoryNarrativeSection: React.FC = () => {
             {current.badge}
           </span>
 
-          <h2 className="font-syne font-black text-6xl sm:text-8xl lg:text-[140px] leading-none tracking-tighter uppercase">
+          <h2 className="font-syne font-black text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl leading-none tracking-tighter uppercase">
             {current.word}
           </h2>
 

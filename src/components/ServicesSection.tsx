@@ -34,7 +34,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenBooking 
             <div className="inline-block px-3 py-1 bg-[#E85500] text-white font-mono text-[11px] font-bold uppercase rounded-md tracking-wider mb-4">
               OUR SERVICES
             </div>
-            <h2 className="font-syne font-extrabold text-4xl sm:text-6xl lg:text-7xl text-[#111111] tracking-tight leading-[0.95]">
+            <h2 className="font-syne font-extrabold text-3xl sm:text-5xl lg:text-6xl text-[#111111] tracking-tight leading-[0.96]">
               FIVE TOOLS. <br />
               <span className="text-[#E85500]">ONE SYSTEM.</span>
             </h2>

@@ -119,7 +119,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenBooking, onNav
 
         {/* Page Hero Header */}
         <div className="mb-16">
-          <h1 className="font-syne font-extrabold text-4xl sm:text-6xl lg:text-7xl text-[#111111] tracking-tight leading-tight mb-4">
+          <h1 className="font-syne font-extrabold text-3xl sm:text-5xl lg:text-6xl text-[#111111] tracking-tight leading-snug mb-4">
             INTERACTIVE SERVICES LAB <br />
             <span className="text-[#E85500]">& LIVE DEMO SUITE.</span>
           </h1>

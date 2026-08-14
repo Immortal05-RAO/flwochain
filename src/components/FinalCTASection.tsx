@@ -17,7 +17,7 @@ export const FinalCTASection: React.FC<FinalCTAProps> = ({ onOpenBooking }) => {
           <span>START YOUR TRANSFORMATION</span>
         </div>
 
-        <h2 className="font-syne font-extrabold text-5xl sm:text-7xl lg:text-8xl tracking-tight leading-[0.95] text-white">
+        <h2 className="font-syne font-extrabold text-3xl sm:text-5xl lg:text-7xl tracking-tight leading-[0.98] text-white">
           READY TO BUILD <br />
           SOMETHING THAT FLOWS?
         </h2>

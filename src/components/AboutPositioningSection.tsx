@@ -12,7 +12,7 @@ export const AboutPositioningSection: React.FC = () => {
         </span>
 
         {/* Large Editorial Headline Split Across Two Lines */}
-        <h2 className="font-syne font-extrabold text-4xl sm:text-6xl lg:text-7xl text-[#111111] tracking-tight mb-16 max-w-5xl leading-[1.02]">
+        <h2 className="font-syne font-extrabold text-3xl sm:text-5xl lg:text-6xl text-[#111111] tracking-tight mb-12 max-w-4xl leading-[1.02]">
           WE DON'T BUILD WEBSITES. <br />
           <span className="text-[#E85500]">WE BUILD OPERATING SYSTEMS.</span>
         </h2>
