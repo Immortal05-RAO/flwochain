@@ -58,8 +58,10 @@ export const CustomCursor: React.FC = () => {
     // Smooth continuous 60fps trailing ring animation loop
     let animId: number;
     const animate = () => {
-      ringPos.current.x += (mousePos.current.x - ringPos.current.x) * 0.3;
-      ringPos.current.y += (mousePos.current.y - ringPos.current.y) * 0.3;
+      // Faster, tighter tracking so ring stays locked to dot
+      const lerpSpeed = isHovered ? 0.45 : 0.3;
+      ringPos.current.x += (mousePos.current.x - ringPos.current.x) * lerpSpeed;
+      ringPos.current.y += (mousePos.current.y - ringPos.current.y) * lerpSpeed;
 
       if (ringRef.current) {
         ringRef.current.style.transform = `translate3d(${ringPos.current.x}px, ${ringPos.current.y}px, 0) translate(-50%, -50%)`;
@@ -77,29 +79,25 @@ export const CustomCursor: React.FC = () => {
       window.removeEventListener('mouseover', handleMouseOver);
       document.removeEventListener('mouseleave', handleMouseLeave);
     };
-  }, [isVisible]);
+  }, [isVisible, isHovered]);
 
   if (!isVisible) return null;
 
   return (
     <>
-      {/* Sleek Inner Orange Dot - Hardware Tracked & Centered */}
+      {/* Sleek Inner Orange Dot (Fixed Constant 10px Size) */}
       <div
         ref={dotRef}
-        className={`fixed top-0 left-0 w-2.5 h-2.5 bg-[#E85500] rounded-full pointer-events-none z-[99999] will-change-transform transition-transform duration-150 ease-out ${
-          isHovered
-            ? 'scale-125 shadow-sm shadow-[#E85500]/60'
-            : 'scale-100 shadow-sm shadow-[#E85500]/30'
-        }`}
+        className="fixed top-0 left-0 w-2.5 h-2.5 bg-[#E85500] rounded-full pointer-events-none z-[99999] will-change-transform shadow-sm shadow-[#E85500]/40"
       />
 
-      {/* Sleek Outer Ring - Controlled Nudge on Clickable Hover (NO EXPLODING BALLOON) */}
+      {/* Sleek Outer Ring (Fixed Constant 24px Size — ZERO Scaling/Swelling/Exploding) */}
       <div
         ref={ringRef}
-        className={`fixed top-0 left-0 w-7 h-7 rounded-full pointer-events-none z-[99998] will-change-transform transition-all duration-200 ease-out border ${
+        className={`fixed top-0 left-0 w-6 h-6 rounded-full pointer-events-none z-[99998] will-change-transform transition-colors duration-200 ease-out border ${
           isHovered
-            ? 'border-[#E85500] bg-[#E85500]/08 scale-110 shadow-sm shadow-[#E85500]/20'
-            : 'border-black/25 bg-transparent scale-100'
+            ? 'border-[#E85500] bg-transparent'
+            : 'border-black/30 bg-transparent'
         }`}
       />
     </>
