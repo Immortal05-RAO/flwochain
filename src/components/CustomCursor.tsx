@@ -83,23 +83,23 @@ export const CustomCursor: React.FC = () => {
 
   return (
     <>
-      {/* Inner Orange Dot - Instant 1:1 Hardware Tracked & Perfectly Centered */}
+      {/* Sleek Inner Orange Dot - Hardware Tracked & Centered */}
       <div
         ref={dotRef}
-        className={`fixed top-0 left-0 w-3 h-3 bg-[#E85500] rounded-full pointer-events-none z-[99999] will-change-transform transition-all duration-150 ease-out ${
+        className={`fixed top-0 left-0 w-2.5 h-2.5 bg-[#E85500] rounded-full pointer-events-none z-[99999] will-change-transform transition-transform duration-150 ease-out ${
           isHovered
-            ? 'scale-[2.4] bg-[#E85500] shadow-lg shadow-orange-500/80'
-            : 'scale-100 shadow-sm shadow-orange-500/40'
+            ? 'scale-125 shadow-sm shadow-[#E85500]/60'
+            : 'scale-100 shadow-sm shadow-[#E85500]/30'
         }`}
       />
 
-      {/* Trailing Outer Ring - Smooth Liquid Inertia & Centered */}
+      {/* Sleek Outer Ring - Controlled Nudge on Clickable Hover (NO EXPLODING BALLOON) */}
       <div
         ref={ringRef}
-        className={`fixed top-0 left-0 w-9 h-9 rounded-full pointer-events-none z-[99998] will-change-transform transition-all duration-200 ease-out border ${
+        className={`fixed top-0 left-0 w-7 h-7 rounded-full pointer-events-none z-[99998] will-change-transform transition-all duration-200 ease-out border ${
           isHovered
-            ? 'border-[#E85500] bg-[#E85500]/15 scale-150 shadow-md shadow-orange-500/20'
-            : 'border-black/30 bg-transparent scale-100'
+            ? 'border-[#E85500] bg-[#E85500]/08 scale-110 shadow-sm shadow-[#E85500]/20'
+            : 'border-black/25 bg-transparent scale-100'
         }`}
       />
     </>
