@@ -87,17 +87,21 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) =
     }
 
     try {
-      // 1. Send admin booking notification to flowchain05@gmail.com
-      const adminPromise = fetch('https://formsubmit.co/ajax/flowchain05@gmail.com', {
+      // Dispatch lead booking notification to flowchain05@gmail.com
+      // AND automatically trigger instant confirmation auto-responder email to client (formData.email)
+      await fetch('https://formsubmit.co/ajax/flowchain05@gmail.com', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
         },
         body: JSON.stringify({
-          _subject: `🔥 New Client Meeting Booking: ${formData.name}`,
+          _subject: `🔥 New Client Strategy Booking: ${formData.name}`,
           _template: 'table',
           _captcha: 'false',
+          email: formData.email,
+          _replyto: formData.email,
+          _autorespond: `Hello ${formData.name},\n\nThank you for booking your Strategy Session with Flowchain Studio!\n\nYour 30-minute system architecture session has been confirmed.\n\nBOOKING DETAILS:\n• Client Name: ${formData.name}\n• Client Email: ${formData.email}\n• Service Requested: ${selectedService}\n• Scheduled Time Slot: ${selectedTime}\n• Meeting Status: CONFIRMED\n\nOur founders (Shashwat V. Rao & Dev U.) look forward to mapping out your automated digital systems on the call.\n\nNeed to reschedule or have questions?\nEmail: flowchain05@gmail.com\nPhone: +91 96860 71617 / +91 89516 48748\n\nBest regards,\nFlowchain Digital Systems Studio`,
           'Client Name': formData.name,
           'Client Email': formData.email,
           'Primary Service Requested': selectedService,
@@ -105,28 +109,6 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) =
           'Booking Time': new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
         }),
       });
-
-      // 2. Send instant automated confirmation email to client's email address
-      const clientPromise = fetch(`https://formsubmit.co/ajax/${encodeURIComponent(formData.email.trim())}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: JSON.stringify({
-          _subject: `✅ Strategy Session Confirmed — Flowchain Studio`,
-          _template: 'table',
-          _captcha: 'false',
-          'Hello': formData.name,
-          'Confirmation Status': 'CONFIRMED',
-          'Service Requested': selectedService,
-          'Scheduled Time Slot (IST)': selectedTime,
-          'Studio Note': 'We have reserved your 30-minute system architecture session. Our founders (Shashwat V. Rao & Dev U.) look forward to building with you!',
-          'Support Contact': 'flowchain05@gmail.com • +91 96860 71617',
-        }),
-      });
-
-      await Promise.allSettled([adminPromise, clientPromise]);
     } catch (err) {
       console.error('Email dispatch error:', err);
     } finally {
