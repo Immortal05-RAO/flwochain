@@ -9,7 +9,7 @@ interface BookingModalProps {
 
 export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
   const [selectedService, setSelectedService] = useState('AI Voice Receptionist & Automation');
-  const [selectedTime, setSelectedTime] = useState('10:00 AM PST');
+  const [selectedTime, setSelectedTime] = useState('10:30 AM IST');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -46,11 +46,11 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) =
   ];
 
   const timeSlots = [
-    '09:00 AM PST',
-    '10:30 AM PST',
-    '01:00 PM PST',
-    '03:30 PM PST',
-    '05:00 PM PST',
+    '10:00 AM IST',
+    '11:30 AM IST',
+    '02:00 PM IST',
+    '04:30 PM IST',
+    '06:00 PM IST',
   ];
 
   return (
