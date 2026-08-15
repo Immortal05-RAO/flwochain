@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Sparkles, CheckCircle2, ArrowRight } from 'lucide-react';
+import { X, Sparkles, CheckCircle2, ArrowRight, Loader2 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 interface BookingModalProps {
@@ -17,23 +17,50 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) =
     notes: '',
   });
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setIsSubmitting(true);
 
-    // Fire Confetti Burst
     try {
-      confetti({
-        particleCount: 100,
-        spread: 70,
-        origin: { y: 0.6 },
-        colors: ['#E85500', '#00D2FF', '#25D366', '#FFFFFF'],
+      // Send real-time client booking email notification to flowchain05@gmail.com
+      await fetch('https://formsubmit.co/ajax/flowchain05@gmail.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          _subject: `🔥 New Client Meeting Booking: ${formData.name}`,
+          _template: 'table',
+          _captcha: 'false',
+          'Client Name': formData.name,
+          'Client Email': formData.email,
+          'Primary Service Requested': selectedService,
+          'Meeting Time Slot (IST)': selectedTime,
+          'Booking Time': new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
+        }),
       });
-    } catch {
-      // Fallback silent
+    } catch (err) {
+      console.error('Email dispatch error:', err);
+    } finally {
+      setIsSubmitting(false);
+      setSubmitted(true);
+
+      // Fire Confetti Burst
+      try {
+        confetti({
+          particleCount: 120,
+          spread: 80,
+          origin: { y: 0.6 },
+          colors: ['#E85500', '#00D2FF', '#25D366', '#FFFFFF'],
+        });
+      } catch {
+        // Fallback silent
+      }
     }
   };
 
@@ -158,10 +185,20 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) =
 
               <button
                 type="submit"
-                className="w-full py-4 bg-[#E85500] hover:bg-[#D44B00] text-white font-mono text-xs font-bold uppercase tracking-wider rounded-full shadow-xl transition-transform hover:scale-[1.02] flex items-center justify-center gap-2 mt-4"
+                disabled={isSubmitting}
+                className="w-full py-4 bg-[#E85500] hover:bg-[#D44B00] text-white font-mono text-xs font-bold uppercase tracking-wider rounded-full shadow-xl transition-transform hover:scale-[1.02] flex items-center justify-center gap-2 mt-4 disabled:opacity-70 disabled:cursor-not-allowed"
               >
-                <span>Confirm Strategy Booking</span>
-                <ArrowRight className="w-4 h-4" />
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Dispatching Meeting Invite...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Confirm Strategy Booking</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
               </button>
             </form>
           </div>
