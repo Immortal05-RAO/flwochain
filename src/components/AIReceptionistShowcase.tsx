@@ -1,143 +1,289 @@
-import React, { useState } from 'react';
-import { Mic, Sparkles, Volume2, ArrowRight } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { ArrowRight } from 'lucide-react';
 
 interface AIReceptionistShowcaseProps {
   onOpenBooking: () => void;
 }
 
-export const AIReceptionistShowcase: React.FC<AIReceptionistShowcaseProps> = ({ onOpenBooking }) => {
-  const [isPlayingCall, setIsPlayingCall] = useState(false);
-  const [activePersona, setActivePersona] = useState<'concierge' | 'technical' | 'sales'>('concierge');
+type PersonaType = 'concierge' | 'technical' | 'sales';
 
-  const personas = [
-    { id: 'concierge', name: 'Concierge AI', desc: 'Friendly booking & general inquiry handler.' },
-    { id: 'technical', name: 'Tech Specialist AI', desc: 'Deep technical qualification & spec intake.' },
-    { id: 'sales', name: 'High-Ticket Sales AI', desc: 'Enterprise lead qualification & executive booking.' },
+export const AIReceptionistShowcase: React.FC<AIReceptionistShowcaseProps> = ({ onOpenBooking }) => {
+  const [activePersona, setActivePersona] = useState<PersonaType>('concierge');
+  const [isSimulating, setIsSimulating] = useState(false);
+  const [visibleStep, setVisibleStep] = useState<number>(4); // Default shows full transcript
+  const [isFading, setIsFading] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [isCardVisible, setIsCardVisible] = useState(false);
+
+  // IntersectionObserver for entrance motion
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (entry.isIntersecting) {
+          setIsCardVisible(true);
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    if (cardRef.current) {
+      observer.observe(cardRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  const personas: { id: PersonaType; label: string }[] = [
+    { id: 'concierge', label: 'Concierge AI' },
+    { id: 'technical', label: 'Tech Specialist AI' },
+    { id: 'sales', label: 'High-Ticket Sales AI' },
   ];
 
-  return (
-    <section className="relative w-full bg-[#0A0A0C] text-white py-16 sm:py-28 px-5 sm:px-8 md:px-12 lg:px-16 selection:bg-[#00D2FF] selection:text-black">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16 space-y-3">
-          <div className="inline-flex items-center gap-2 font-mono text-xs text-[#00D2FF] uppercase tracking-widest px-3 py-1 bg-[#00D2FF]/10 rounded-full">
-            <Sparkles className="w-4 h-4" />
-            <span>24/7 VOICE AGENT SHOWCASE</span>
-          </div>
+  const transcriptData: Record<PersonaType, Array<{ sender: 'caller' | 'ai'; text: string }>> = {
+    concierge: [
+      { sender: 'caller', text: 'Hi, I need an AI voice receptionist to handle inbound bookings for our clinic.' },
+      { sender: 'ai', text: 'Hello! We build HIPAA-compliant voice agents that handle scheduling 24/7. Shall I lock in a 10-minute demo for tomorrow?' },
+      { sender: 'caller', text: 'Yes, 10 AM PST works perfectly.' },
+      { sender: 'ai', text: 'Done! Calendar invite dispatched to your email. Talk soon!' },
+    ],
+    technical: [
+      { sender: 'caller', text: 'Do your voice agents support multi-step CRM webhooks and live database lookups?' },
+      { sender: 'ai', text: 'Yes. Our agents execute real-time REST API queries mid-call with sub-500ms voice latency.' },
+      { sender: 'caller', text: 'Excellent. Let’s start a technical architecture audit.' },
+      { sender: 'ai', text: 'Understood. Reserving an engineering review slot for your team now.' },
+    ],
+    sales: [
+      { sender: 'caller', text: 'What is the ROI on deploying AI voice agents for enterprise inbound leads?' },
+      { sender: 'ai', text: 'Our clients average a 340% increase in lead velocity by capturing and qualifying 100% of after-hours calls.' },
+      { sender: 'caller', text: 'Sounds solid. Can we set up an executive strategy call?' },
+      { sender: 'ai', text: 'Locking in a 20-minute strategy session with Shashwat V. Rao & Dev U.' },
+    ],
+  };
 
+  const handlePersonaChange = (newPersona: PersonaType) => {
+    if (newPersona === activePersona) return;
+    setIsFading(true);
+    setTimeout(() => {
+      setActivePersona(newPersona);
+      setVisibleStep(4);
+      setIsFading(false);
+    }, 300);
+  };
+
+  const handleSimulateCall = () => {
+    if (isSimulating) return;
+    setIsSimulating(true);
+    setVisibleStep(1);
+
+    const timers = [
+      setTimeout(() => setVisibleStep(2), 1200),
+      setTimeout(() => setVisibleStep(3), 2600),
+      setTimeout(() => {
+        setVisibleStep(4);
+        setIsSimulating(false);
+      }, 4000),
+    ];
+
+    return () => timers.forEach(clearTimeout);
+  };
+
+  const currentTranscript = transcriptData[activePersona];
+
+  return (
+    <section
+      id="ai-receptionist"
+      className="relative w-full bg-[#111111] text-white py-16 sm:py-28 px-5 sm:px-8 md:px-12 lg:px-16 selection:bg-[#E85500] selection:text-white"
+    >
+      <div className="max-w-6xl mx-auto">
+        {/* Section Header */}
+        <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-12 space-y-4">
           <h2 className="font-syne font-extrabold text-3xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-[0.98]">
-            YOUR 24/7 AI <br />
-            <span className="text-[#00D2FF]">VOICE RECEPTIONIST.</span>
+            Your Business Never Sleeps.
           </h2>
 
-          <p className="font-sans text-xs sm:text-base text-[#888888] max-w-xl mx-auto leading-relaxed">
-            Never lose a lead to voicemail again. Human-sounding AI phone agents that handle inbound calls in under 500ms.
+          <p className="font-sans text-sm sm:text-base text-[#999999] max-w-[520px] mx-auto leading-relaxed">
+            Our AI voice agents answer every inbound call, qualify leads, and book appointments — 24 hours a day, zero wait time.
           </p>
         </div>
 
-        {/* Persona Selector Tabs (Mobile Stack / Scroll) */}
-        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-10">
-          {personas.map((p) => (
-            <button
-              key={p.id}
-              onClick={() => setActivePersona(p.id as any)}
-              className={`px-4 py-2 rounded-full font-mono text-xs uppercase tracking-wider transition-all duration-300 ${
-                activePersona === p.id
-                  ? 'bg-[#00D2FF] text-black font-bold shadow-lg shadow-cyan-500/20'
-                  : 'bg-white/5 text-white/70 hover:bg-white/10'
-              }`}
-            >
-              {p.name}
-            </button>
+        {/* Service Type Selector (Clean text links with orange underline) */}
+        <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-8 mb-10 font-mono text-xs uppercase tracking-wider">
+          {personas.map((p, idx) => (
+            <React.Fragment key={p.id}>
+              {idx > 0 && <span className="text-[#333333] select-none">•</span>}
+              <button
+                onClick={() => handlePersonaChange(p.id)}
+                className={`transition-colors py-1 ${
+                  activePersona === p.id
+                    ? 'text-white font-bold border-b-2 border-[#E85500] pb-1'
+                    : 'text-[#555555] hover:text-white'
+                }`}
+              >
+                {p.label}
+              </button>
+            </React.Fragment>
           ))}
         </div>
 
-        {/* MAIN SHOWCASE CONTAINER: Single Column Stack on Mobile */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center glass-card-dark p-6 sm:p-10 rounded-3xl border border-white/15">
-          {/* Phone Call Simulator Box */}
-          <div className="lg:col-span-6 flex flex-col items-center justify-center text-center space-y-6 w-full">
-            <div className="relative w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-gradient-to-tr from-[#00D2FF] to-blue-600 p-1 flex items-center justify-center shadow-2xl">
-              <div className="w-full h-full rounded-full bg-[#0A0A0C] flex flex-col items-center justify-center p-4">
-                <Mic className={`w-8 h-8 text-[#00D2FF] ${isPlayingCall ? 'animate-bounce' : ''}`} />
-                <span className="font-mono text-[9px] text-[#00D2FF] mt-1 uppercase">
-                  {isPlayingCall ? 'LIVE CALL ACTIVE' : 'STANDBY'}
-                </span>
+        {/* Main Interactive Centered Card */}
+        <div
+          ref={cardRef}
+          className={`bg-[#1A1A1A] border border-[#2A2A2A] rounded-2xl sm:rounded-3xl p-6 sm:p-10 lg:p-12 shadow-2xl transition-all duration-700 ease-out ${
+            isCardVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+          }`}
+        >
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+            {/* Left Column — Phone Illustration & Clean White Pill Button */}
+            <div className="flex flex-col items-center justify-center text-center space-y-8 w-full">
+              {/* Minimal Dark Phone Silhouette Illustration */}
+              <div className="relative w-28 h-48 sm:w-32 sm:h-56 rounded-[2.2rem] bg-[#111111] border-2 border-[#2A2A2A] p-2 flex flex-col justify-between items-center shadow-xl">
+                {/* Phone Speaker Notch */}
+                <div className="w-10 h-1 bg-[#2A2A2A] rounded-full mt-1" />
+
+                {/* Inner Screen Display */}
+                <div className="w-full my-auto flex flex-col items-center space-y-3 px-2">
+                  <div className="w-10 h-10 rounded-full bg-[#2A2A2A] flex items-center justify-center text-[#E85500] font-mono text-xs font-bold">
+                    AI
+                  </div>
+                  <div className="font-mono text-[10px] uppercase tracking-wider text-[#888888]">
+                    {isSimulating ? 'CALL IN PROGRESS' : '24/7 INBOUND ACTIVE'}
+                  </div>
+                  {/* Single Minimal Audio Line Waveform */}
+                  <div className="w-16 h-1 flex items-center justify-center gap-1">
+                    {[12, 24, 16, 28, 14].map((h, i) => (
+                      <div
+                        key={i}
+                        className="w-1 bg-white/70 rounded-full transition-all duration-300"
+                        style={{ height: isSimulating ? `${h}px` : '4px' }}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                {/* Home Indicator */}
+                <div className="w-8 h-1 bg-[#2A2A2A] rounded-full mb-1" />
+              </div>
+
+              {/* Single CTA Button — Clean White Pill Button (Hover shifts to orange) */}
+              <button
+                onClick={handleSimulateCall}
+                disabled={isSimulating}
+                className="w-full sm:w-auto min-h-[48px] px-8 py-3.5 bg-white hover:bg-[#E85500] text-black hover:text-white font-mono text-xs font-bold uppercase tracking-wider rounded-full shadow-lg transition-all duration-300 flex items-center justify-center gap-2 group"
+              >
+                <span>{isSimulating ? 'Simulating Call...' : 'Simulate an Inbound Call'}</span>
+                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+              </button>
+
+              {/* Minimal Data Stats Below Button */}
+              <div className="grid grid-cols-2 gap-6 w-full max-w-xs pt-2">
+                <div className="text-center">
+                  <div className="font-syne font-bold text-2xl sm:text-3xl text-white">
+                    100%
+                  </div>
+                  <div className="font-mono text-[11px] text-[#666666] uppercase mt-1">
+                    Call Answer Rate
+                  </div>
+                </div>
+
+                <div className="text-center">
+                  <div className="font-syne font-bold text-2xl sm:text-3xl text-white">
+                    &lt; 500ms
+                  </div>
+                  <div className="font-mono text-[11px] text-[#666666] uppercase mt-1">
+                    Voice Response Latency
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Audio Waveform Visualizer */}
-            <div className="w-full flex items-center justify-center gap-1.5 h-10">
-              {[16, 28, 12, 36, 20, 32, 14, 24, 38, 18].map((h, i) => (
-                <div
-                  key={i}
-                  className="w-1.5 bg-[#00D2FF] rounded-full transition-all duration-300"
-                  style={{
-                    height: isPlayingCall ? `${Math.min(36, h * (1 + Math.random()))}px` : '8px',
-                  }}
-                />
-              ))}
-            </div>
-
-            {/* Simulate Call Button */}
-            <button
-              onClick={() => setIsPlayingCall(!isPlayingCall)}
-              className="w-full sm:w-auto min-h-[48px] px-8 py-3 bg-[#00D2FF] text-black font-mono font-bold text-xs uppercase tracking-wider rounded-full flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20"
-            >
-              <Volume2 className="w-4 h-4" />
-              <span>{isPlayingCall ? 'End Call Demo' : 'Simulate Inbound Call'}</span>
-            </button>
-          </div>
-
-          {/* Transcript Log & Metrics */}
-          <div className="lg:col-span-6 space-y-4 w-full">
-            <div className="font-mono text-xs text-[#00D2FF] uppercase font-bold flex items-center justify-between border-b border-white/10 pb-2">
-              <span>REAL-TIME CALL TRANSCRIPT</span>
-              <span>LATENCY: 420MS</span>
-            </div>
-
-            <div className="bg-black/60 rounded-2xl p-4 sm:p-5 border border-white/10 space-y-3 text-xs sm:text-sm font-sans leading-relaxed">
-              <div className="flex items-start gap-2">
-                <span className="font-mono text-[10px] text-[#00D2FF] uppercase mt-0.5">Caller:</span>
-                <p className="text-white/80">"Hi, I need a custom AI voice receptionist for my medical clinic."</p>
+            {/* Right Column — Clean Line-by-Line Transcript Panel */}
+            <div className="space-y-4 w-full">
+              {/* Header Row */}
+              <div className="flex items-center justify-between font-mono text-[11px] text-[#E85500] font-bold uppercase tracking-wide">
+                <span>REAL-TIME CALL TRANSCRIPT</span>
+                <span>LATENCY: 420MS</span>
               </div>
 
-              <div className="flex items-start gap-2">
-                <span className="font-mono text-[10px] text-green-400 uppercase mt-0.5">Flowchain AI:</span>
-                <p className="text-white font-medium">"Hello! Absolutely. We build HIPAA-compliant voice agents. Can I book a 10-minute demo for you tomorrow?"</p>
-              </div>
+              {/* Divider */}
+              <div className="w-full h-px bg-[#2A2A2A]" />
 
-              <div className="flex items-start gap-2">
-                <span className="font-mono text-[10px] text-[#00D2FF] uppercase mt-0.5">Caller:</span>
-                <p className="text-white/80">"Yes, 2:00 PM PST works."</p>
-              </div>
+              {/* Conversation Transcript Stream */}
+              <div
+                className={`space-y-5 py-3 min-h-[260px] transition-opacity duration-300 ${
+                  isFading ? 'opacity-0' : 'opacity-100'
+                }`}
+              >
+                {currentTranscript.slice(0, visibleStep).map((row, idx) => (
+                  <div key={idx} className="space-y-1 text-sm font-sans leading-relaxed animate-fade-in">
+                    <div className="font-mono text-[11px] uppercase tracking-wider font-bold">
+                      {row.sender === 'caller' ? (
+                        <span className="text-[#666666]">CALLER:</span>
+                      ) : (
+                        <span className="text-[#E85500]">FLOWCHAIN AI:</span>
+                      )}
+                    </div>
+                    <p className={row.sender === 'caller' ? 'text-white' : 'text-[#E0E0E0]'}>
+                      "{row.text}"
+                    </p>
+                  </div>
+                ))}
 
-              <div className="flex items-start gap-2">
-                <span className="font-mono text-[10px] text-green-400 uppercase mt-0.5">Flowchain AI:</span>
-                <p className="text-white font-medium">"Done! Calendar invite dispatched to your email. Talk soon!"</p>
-              </div>
-            </div>
-
-            {/* Key Stat Cards Stack */}
-            <div className="grid grid-cols-2 gap-3 pt-2">
-              <div className="p-3 bg-white/5 rounded-2xl border border-white/10 text-center">
-                <span className="font-syne font-extrabold text-xl sm:text-2xl text-white block">100%</span>
-                <span className="font-mono text-[10px] text-[#888888] uppercase">Call Answer Rate</span>
-              </div>
-              <div className="p-3 bg-white/5 rounded-2xl border border-white/10 text-center">
-                <span className="font-syne font-extrabold text-xl sm:text-2xl text-[#00D2FF] block">&lt; 500ms</span>
-                <span className="font-mono text-[10px] text-[#888888] uppercase">Voice Latency</span>
+                {/* 3-Dot Pulse Typing Indicator before next AI line */}
+                {isSimulating && visibleStep < 4 && (
+                  <div className="flex items-center gap-1.5 pt-2">
+                    <span className="font-mono text-[11px] text-[#E85500] uppercase font-bold mr-2">
+                      FLOWCHAIN AI:
+                    </span>
+                    <div className="flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#E85500] animate-ping" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#E85500] animate-ping delay-150" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#E85500] animate-ping delay-300" />
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
         </div>
 
-        {/* CTA */}
+        {/* Stats Bar Below Card (3 Stats separated by thin vertical dividers) */}
+        <div className="mt-12 sm:mt-16 grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-0 border-t border-[#2A2A2A] pt-10 text-center">
+          <div className="sm:border-r border-[#2A2A2A] sm:px-4">
+            <div className="font-syne font-extrabold text-3xl sm:text-4xl text-white mb-1">
+              24/7
+            </div>
+            <div className="font-mono text-xs text-[#666666] uppercase tracking-wider">
+              Always On
+            </div>
+          </div>
+
+          <div className="sm:border-r border-[#2A2A2A] sm:px-4">
+            <div className="font-syne font-extrabold text-3xl sm:text-4xl text-white mb-1">
+              &lt; 500ms
+            </div>
+            <div className="font-mono text-xs text-[#666666] uppercase tracking-wider">
+              Response Time
+            </div>
+          </div>
+
+          <div className="sm:px-4">
+            <div className="font-syne font-extrabold text-3xl sm:text-4xl text-white mb-1">
+              100%
+            </div>
+            <div className="font-mono text-xs text-[#666666] uppercase tracking-wider">
+              Call Coverage
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom CTA Button */}
         <div className="mt-12 text-center">
           <button
             onClick={onOpenBooking}
-            className="w-full sm:w-auto min-h-[48px] px-8 py-3.5 bg-white text-black hover:bg-[#00D2FF] font-mono text-xs font-semibold uppercase tracking-wider rounded-full transition-colors inline-flex items-center justify-center gap-2"
+            className="w-full sm:w-auto min-h-[48px] px-8 py-3.5 bg-[#E85500] hover:bg-[#D44B00] text-white font-mono text-xs font-semibold uppercase tracking-wider rounded-full shadow-xl transition-all duration-300 inline-flex items-center justify-center gap-2"
           >
-            <span>Build Your AI Voice Receptionist</span>
+            <span>Deploy Your AI Voice Receptionist</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>
