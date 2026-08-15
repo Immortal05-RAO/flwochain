@@ -160,7 +160,8 @@ export default function FlowchainHomepage() {
 
       {/* NAV */}
       <nav className="fixed top-0 z-50 flex w-full items-center justify-between px-8 py-5 backdrop-blur-md bg-[#0A0A0B]/60">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
+          <img src="/logo.png" alt="Flowchain Logo" className="h-7 w-7 object-contain drop-shadow-[0_0_10px_rgba(244,135,61,0.5)] transition-transform hover:scale-110" />
           <span className="text-lg font-bold tracking-wider">FLOWCHAIN</span>
         </div>
         <div className="hidden gap-8 text-sm text-white/60 md:flex">

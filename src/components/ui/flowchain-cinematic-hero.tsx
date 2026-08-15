@@ -219,11 +219,11 @@ MagneticButton.displayName = "MagneticButton";
 
 const MarqueeContent = () => (
   <div className="flex items-center space-x-12 px-6">
-    <span>CONNECTED BUSINESS ARCHITECTURE</span> <span className="text-[#A9BE9B]">✦</span>
-    <span>AUTOMATED WORKFLOWS</span> <span className="text-purple-400">✦</span>
-    <span>ZERO MISSED LEADS</span> <span className="text-[#A9BE9B]">✦</span>
-    <span>24/7 AI AGENTS</span> <span className="text-purple-400">✦</span>
-    <span>INSTANT RESPONSE</span> <span className="text-[#A9BE9B]">✦</span>
+    <span>CONNECTED BUSINESS ARCHITECTURE</span> <img src="/logo.png" alt="Logo" className="h-4 w-4 object-contain opacity-80" />
+    <span>AUTOMATED WORKFLOWS</span> <img src="/logo.png" alt="Logo" className="h-4 w-4 object-contain opacity-80" />
+    <span>ZERO MISSED LEADS</span> <img src="/logo.png" alt="Logo" className="h-4 w-4 object-contain opacity-80" />
+    <span>24/7 AI AGENTS</span> <img src="/logo.png" alt="Logo" className="h-4 w-4 object-contain opacity-80" />
+    <span>INSTANT RESPONSE</span> <img src="/logo.png" alt="Logo" className="h-4 w-4 object-contain opacity-80" />
   </div>
 );
 
@@ -427,7 +427,8 @@ export function FlowchainCinematicHero({ className }: { className?: string }) {
           <span className="text-white/50 text-[10px] md:text-xs font-bold uppercase tracking-widest">Crafted with</span>
           <span className="animate-cinematic-heartbeat text-sm md:text-base text-red-500">❤</span>
           <span className="text-white/50 text-[10px] md:text-xs font-bold uppercase tracking-widest">by</span>
-          <span className="text-white font-black text-xs md:text-sm tracking-normal ml-1">Flowchain</span>
+          <img src="/logo.png" alt="Flowchain Logo" className="h-4 w-4 object-contain ml-0.5" />
+          <span className="text-white font-black text-xs md:text-sm tracking-normal">Flowchain</span>
         </div>
 
         {/* Scroll Down Arrow */}

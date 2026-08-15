@@ -16,14 +16,56 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState<string>('home');
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 30);
+
+      if (currentPage !== 'home') {
+        setActiveSection('services');
+        return;
+      }
+
+      const sectionMap: { id: string; name: string }[] = [
+        { id: 'hero', name: 'home' },
+        { id: 'services', name: 'services' },
+        { id: 'explosion', name: 'explosion' },
+        { id: 'work', name: 'work' },
+        { id: 'about', name: 'about' },
+      ];
+
+      const scrollPosition = window.scrollY + 250; // Offset threshold
+
+      for (let i = sectionMap.length - 1; i >= 0; i--) {
+        const el = document.getElementById(sectionMap[i].id);
+        if (el) {
+          const top = el.offsetTop;
+          if (scrollPosition >= top) {
+            setActiveSection(sectionMap[i].name);
+            break;
+          }
+        }
+      }
     };
-    window.addEventListener('scroll', handleScroll);
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [currentPage]);
+
+  const scrollToSection = (sectionId: string) => {
+    if (currentPage !== 'home') {
+      onNavigateHome();
+      setTimeout(() => {
+        const el = document.getElementById(sectionId);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 150);
+    } else {
+      const el = document.getElementById(sectionId);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <>
@@ -35,12 +77,14 @@ export const Navbar: React.FC<NavbarProps> = ({
         >
           {/* Logo (Left) */}
           <button
-            onClick={onNavigateHome}
+            onClick={() => scrollToSection('hero')}
             className="flex items-center gap-2.5 group text-left"
           >
-            <div className="w-8 h-8 rounded-lg bg-[#E85500] flex items-center justify-center text-white font-bold text-sm tracking-widest shadow-md transition-transform duration-300 group-hover:rotate-12">
-              <span className="font-syne">F</span>
-            </div>
+            <img
+              src="/logo.png"
+              alt="Flowchain Logo"
+              className="w-8 h-8 object-contain transition-transform duration-300 group-hover:scale-110 drop-shadow-[0_2px_8px_rgba(232,85,0,0.5)]"
+            />
             <span className="font-syne text-lg font-extrabold tracking-tight text-[#111111] group-hover:text-[#E85500] transition-colors">
               FLOWCHAIN
             </span>
@@ -49,61 +93,83 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Desktop Links (Hidden on Mobile) */}
           <div className="hidden md:flex items-center gap-6 text-xs uppercase font-mono tracking-wider text-[#444444]">
             <button
-              onClick={onNavigateHome}
+              onClick={() => scrollToSection('hero')}
               className={`relative py-1 transition-colors ${
-                currentPage === 'home' ? 'text-[#E85500] font-bold' : 'hover:text-[#E85500]'
+                activeSection === 'home' && currentPage === 'home'
+                  ? 'text-[#E85500] font-bold'
+                  : 'hover:text-[#E85500]'
               }`}
             >
               Home
-              {currentPage === 'home' && (
-                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#E85500]" />
+              {activeSection === 'home' && currentPage === 'home' && (
+                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#E85500] rounded-full" />
               )}
             </button>
 
             <button
-              onClick={onNavigateServices}
+              onClick={() => {
+                if (currentPage === 'home') {
+                  scrollToSection('services');
+                } else {
+                  onNavigateServices();
+                }
+              }}
               className={`relative py-1 transition-colors flex items-center gap-1.5 ${
-                currentPage === 'services' ? 'text-[#E85500] font-bold' : 'hover:text-[#E85500]'
+                currentPage === 'services' || activeSection === 'services'
+                  ? 'text-[#E85500] font-bold'
+                  : 'hover:text-[#E85500]'
               }`}
             >
               <span>Services Lab</span>
               <span className="px-1.5 py-0.5 text-[9px] bg-[#E85500] text-white font-bold rounded-full animate-pulse">
                 DEMOS
               </span>
-              {currentPage === 'services' && (
-                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#E85500]" />
+              {(currentPage === 'services' || activeSection === 'services') && (
+                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#E85500] rounded-full" />
               )}
             </button>
 
-            <a
-              href="#explosion"
-              onClick={() => {
-                if (currentPage !== 'home') onNavigateHome();
-              }}
-              className="hover:text-[#E85500] transition-colors"
+            <button
+              onClick={() => scrollToSection('explosion')}
+              className={`relative py-1 transition-colors ${
+                activeSection === 'explosion' && currentPage === 'home'
+                  ? 'text-[#E85500] font-bold'
+                  : 'hover:text-[#E85500]'
+              }`}
             >
               Explosion
-            </a>
+              {activeSection === 'explosion' && currentPage === 'home' && (
+                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#E85500] rounded-full" />
+              )}
+            </button>
 
-            <a
-              href="#work"
-              onClick={() => {
-                if (currentPage !== 'home') onNavigateHome();
-              }}
-              className="hover:text-[#E85500] transition-colors"
+            <button
+              onClick={() => scrollToSection('work')}
+              className={`relative py-1 transition-colors ${
+                activeSection === 'work' && currentPage === 'home'
+                  ? 'text-[#E85500] font-bold'
+                  : 'hover:text-[#E85500]'
+              }`}
             >
               Work
-            </a>
+              {activeSection === 'work' && currentPage === 'home' && (
+                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#E85500] rounded-full" />
+              )}
+            </button>
 
-            <a
-              href="#about"
-              onClick={() => {
-                if (currentPage !== 'home') onNavigateHome();
-              }}
-              className="hover:text-[#E85500] transition-colors"
+            <button
+              onClick={() => scrollToSection('about')}
+              className={`relative py-1 transition-colors ${
+                activeSection === 'about' && currentPage === 'home'
+                  ? 'text-[#E85500] font-bold'
+                  : 'hover:text-[#E85500]'
+              }`}
             >
               About
-            </a>
+              {activeSection === 'about' && currentPage === 'home' && (
+                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#E85500] rounded-full" />
+              )}
+            </button>
           </div>
 
           {/* Desktop Book a Call CTA (Hidden on Mobile) */}
@@ -133,10 +199,12 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="fixed inset-0 z-[999] bg-[#0A0A0C] text-white flex flex-col justify-between p-6 sm:p-8 animate-fade-in md:hidden">
           {/* Header Bar inside Overlay */}
           <div className="flex items-center justify-between border-b border-white/10 pb-4">
-            <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-[#E85500] flex items-center justify-center text-white font-bold text-xs">
-                F
-              </div>
+            <div className="flex items-center gap-2.5">
+              <img
+                src="/logo.png"
+                alt="Flowchain Logo"
+                className="w-7 h-7 object-contain drop-shadow-[0_2px_8px_rgba(232,85,0,0.5)]"
+              />
               <span className="font-syne font-extrabold text-base tracking-tight">
                 FLOWCHAIN
               </span>
@@ -156,9 +224,13 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
-                onNavigateHome();
+                scrollToSection('hero');
               }}
-              className="hover:text-[#E85500] transition-colors"
+              className={`transition-colors ${
+                activeSection === 'home' && currentPage === 'home'
+                  ? 'text-[#E85500]'
+                  : 'hover:text-[#E85500]'
+              }`}
             >
               Home
             </button>
@@ -166,9 +238,17 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
-                onNavigateServices();
+                if (currentPage === 'home') {
+                  scrollToSection('services');
+                } else {
+                  onNavigateServices();
+                }
               }}
-              className="hover:text-[#E85500] transition-colors flex items-center gap-2"
+              className={`transition-colors flex items-center gap-2 ${
+                currentPage === 'services' || activeSection === 'services'
+                  ? 'text-[#E85500]'
+                  : 'hover:text-[#E85500]'
+              }`}
             >
               <span>Services Lab</span>
               <span className="text-xs bg-[#E85500] text-white px-2 py-0.5 rounded-full font-mono font-bold">
@@ -176,38 +256,47 @@ export const Navbar: React.FC<NavbarProps> = ({
               </span>
             </button>
 
-            <a
-              href="#explosion"
+            <button
               onClick={() => {
                 setMobileMenuOpen(false);
-                if (currentPage !== 'home') onNavigateHome();
+                scrollToSection('explosion');
               }}
-              className="hover:text-[#E85500] transition-colors"
+              className={`transition-colors ${
+                activeSection === 'explosion' && currentPage === 'home'
+                  ? 'text-[#E85500]'
+                  : 'hover:text-[#E85500]'
+              }`}
             >
               Explosion
-            </a>
+            </button>
 
-            <a
-              href="#work"
+            <button
               onClick={() => {
                 setMobileMenuOpen(false);
-                if (currentPage !== 'home') onNavigateHome();
+                scrollToSection('work');
               }}
-              className="hover:text-[#E85500] transition-colors"
+              className={`transition-colors ${
+                activeSection === 'work' && currentPage === 'home'
+                  ? 'text-[#E85500]'
+                  : 'hover:text-[#E85500]'
+              }`}
             >
               Work
-            </a>
+            </button>
 
-            <a
-              href="#about"
+            <button
               onClick={() => {
                 setMobileMenuOpen(false);
-                if (currentPage !== 'home') onNavigateHome();
+                scrollToSection('about');
               }}
-              className="hover:text-[#E85500] transition-colors"
+              className={`transition-colors ${
+                activeSection === 'about' && currentPage === 'home'
+                  ? 'text-[#E85500]'
+                  : 'hover:text-[#E85500]'
+              }`}
             >
               About
-            </a>
+            </button>
           </div>
 
           {/* Bottom Full-Width Solid Orange "Book a Call" Button */}

@@ -273,7 +273,7 @@ export function FlowchainShowcase({ className }: { className?: string }) {
 
         {/* Pill Badge */}
         <div className="mb-8 inline-flex items-center gap-2.5 rounded-full border border-white/15 bg-white/[0.04] px-5 py-2 text-xs font-medium text-white/80 backdrop-blur-md shadow-inner md:text-sm">
-          <span className="text-[#A9BE9B]">✦</span>
+          <img src="/logo.png" alt="Logo" className="h-4 w-4 object-contain" />
           <span>Connected Business Architecture</span>
           <ArrowUpRight className="h-4 w-4 opacity-60" />
         </div>
