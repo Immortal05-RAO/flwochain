@@ -87,8 +87,8 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) =
     }
 
     try {
-      // Send real-time client booking email notification to flowchain05@gmail.com
-      await fetch('https://formsubmit.co/ajax/flowchain05@gmail.com', {
+      // 1. Send admin booking notification to flowchain05@gmail.com
+      const adminPromise = fetch('https://formsubmit.co/ajax/flowchain05@gmail.com', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -105,6 +105,28 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) =
           'Booking Time': new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
         }),
       });
+
+      // 2. Send instant automated confirmation email to client's email address
+      const clientPromise = fetch(`https://formsubmit.co/ajax/${encodeURIComponent(formData.email.trim())}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          _subject: `✅ Strategy Session Confirmed — Flowchain Studio`,
+          _template: 'table',
+          _captcha: 'false',
+          'Hello': formData.name,
+          'Confirmation Status': 'CONFIRMED',
+          'Service Requested': selectedService,
+          'Scheduled Time Slot (IST)': selectedTime,
+          'Studio Note': 'We have reserved your 30-minute system architecture session. Our founders (Shashwat V. Rao & Dev U.) look forward to building with you!',
+          'Support Contact': 'flowchain05@gmail.com • +91 96860 71617',
+        }),
+      });
+
+      await Promise.allSettled([adminPromise, clientPromise]);
     } catch (err) {
       console.error('Email dispatch error:', err);
     } finally {
