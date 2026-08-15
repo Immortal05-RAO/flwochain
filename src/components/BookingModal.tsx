@@ -18,12 +18,73 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) =
   });
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [emailError, setEmailError] = useState<string | null>(null);
 
   if (!isOpen) return null;
 
+  const validateEmailAddress = async (email: string): Promise<boolean> => {
+    const trimmed = email.trim().toLowerCase();
+
+    // 1. Strict RFC 5322 Email Format Regex
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,24}$/;
+    if (!emailRegex.test(trimmed)) {
+      setEmailError('Please enter a valid email format (e.g. alex@company.com)');
+      return false;
+    }
+
+    const [username, domain] = trimmed.split('@');
+
+    // 2. Reject obvious short/fake usernames
+    if (username.length < 2) {
+      setEmailError('Please enter a complete email username.');
+      return false;
+    }
+
+    // 3. Reject known fake TLDs or invalid domains
+    const invalidTLDs = ['test', 'example', 'invalid', 'localhost', 'local', 'asdf', 'qwerty', 'fake'];
+    const domainParts = domain.split('.');
+    const tld = domainParts[domainParts.length - 1];
+
+    if (invalidTLDs.includes(tld) || domain.length < 4) {
+      setEmailError(`Please use a valid email domain (e.g. gmail.com).`);
+      return false;
+    }
+
+    // 4. Real-time Google DNS MX Record Verification
+    try {
+      const res = await fetch(`https://dns.google/resolve?name=${encodeURIComponent(domain)}&type=MX`);
+      if (res.ok) {
+        const data = await res.json();
+        // Status 0 = NOERROR. Check if MX Answer records exist
+        if (data.Status !== 0 || !data.Answer || data.Answer.length === 0) {
+          // Check fallback A record
+          const aRes = await fetch(`https://dns.google/resolve?name=${encodeURIComponent(domain)}&type=A`);
+          const aData = await aRes.json();
+          if (aData.Status !== 0 || !aData.Answer || aData.Answer.length === 0) {
+            setEmailError(`The domain "@${domain}" does not exist or cannot receive emails.`);
+            return false;
+          }
+        }
+      }
+    } catch (err) {
+      console.warn('DNS MX check fallback:', err);
+    }
+
+    setEmailError(null);
+    return true;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setEmailError(null);
     setIsSubmitting(true);
+
+    // Validate email authenticity before submitting
+    const isValid = await validateEmailAddress(formData.email);
+    if (!isValid) {
+      setIsSubmitting(false);
+      return;
+    }
 
     try {
       // Send real-time client booking email notification to flowchain05@gmail.com
@@ -177,9 +238,19 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) =
                     required
                     placeholder="alex@company.com"
                     value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full p-3 rounded-xl bg-white border border-black/10 text-[#111111] focus:outline-none focus:border-[#E85500]"
+                    onChange={(e) => {
+                      setFormData({ ...formData, email: e.target.value });
+                      if (emailError) setEmailError(null);
+                    }}
+                    className={`w-full p-3 rounded-xl bg-white border text-[#111111] focus:outline-none transition-colors ${
+                      emailError ? 'border-red-500 ring-2 ring-red-500/20' : 'border-black/10 focus:border-[#E85500]'
+                    }`}
                   />
+                  {emailError && (
+                    <span className="block text-[11px] font-semibold text-red-500 mt-1">
+                      {emailError}
+                    </span>
+                  )}
                 </div>
               </div>
 
