@@ -39,20 +39,24 @@ export const AboutPositioningSection: React.FC = () => {
               We engineer high-conversion web architecture, 24/7 AI voice receptionists, WhatsApp lead capture engines, and connected workflow automations that eliminate operational friction.
             </p>
 
-            {/* Founders & Directors Card (The ONLY place founder names appear) */}
+            {/* Founders & Leadership Card */}
             <div className="p-5 bg-white/80 rounded-2xl border border-black/10 shadow-sm space-y-3 font-mono text-xs">
               <div className="flex items-center gap-2 text-[#E85500] font-bold uppercase">
                 <UserCheck className="w-4 h-4" />
-                <span>FOUNDERS & DIRECTORS</span>
+                <span>LEADERSHIP & EXECUTIVE TEAM</span>
               </div>
-              <div className="grid grid-cols-2 gap-4 text-[#111111] pt-1">
-                <div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-[#111111] pt-1">
+                <div className="p-3 bg-black/5 rounded-xl">
                   <span className="text-[#888888] block text-[10px] uppercase font-semibold">FOUNDER</span>
                   <span className="font-bold text-sm">Shashwat V. Rao</span>
                 </div>
-                <div>
+                <div className="p-3 bg-black/5 rounded-xl">
                   <span className="text-[#888888] block text-[10px] uppercase font-semibold">FOUNDER</span>
                   <span className="font-bold text-sm">Dev U.</span>
+                </div>
+                <div className="p-3 bg-black/5 rounded-xl">
+                  <span className="text-[#888888] block text-[10px] uppercase font-semibold">COO</span>
+                  <span className="font-bold text-sm">Nithin K. N.</span>
                 </div>
               </div>
             </div>

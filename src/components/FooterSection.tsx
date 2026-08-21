@@ -11,17 +11,19 @@ export const FooterSection: React.FC<FooterSectionProps> = () => {
       <div className="max-w-6xl mx-auto flex flex-col items-center text-center gap-8">
         {/* Logo (Centered Top) */}
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-[#E85500] flex items-center justify-center text-white font-bold text-sm tracking-widest shadow-md">
-            <span className="font-syne">F</span>
-          </div>
+          <img
+            src="/logo.png"
+            alt="Flowchain Logo"
+            className="w-8 h-8 object-contain drop-shadow-[0_2px_8px_rgba(232,85,0,0.5)]"
+          />
           <span className="font-syne text-xl font-extrabold tracking-tight text-white">
             FLOWCHAIN
           </span>
         </div>
 
         {/* Brand Statement */}
-        <p className="font-sans text-xs sm:text-sm text-[#888888] max-w-md leading-relaxed">
-          Flowchain is a digital systems and AI automation studio founded by Shashwat V. Rao and Dev U.
+        <p className="font-sans text-xs sm:text-sm text-[#888888] max-w-lg leading-relaxed">
+          Flowchain is a digital systems and AI automation studio led by Shashwat V. Rao (Founder), Dev U. (Founder), and Nithin K. N. (COO).
         </p>
 
         {/* Navigation Links Stack (Centered, 14px) */}
