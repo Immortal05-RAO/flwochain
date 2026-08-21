@@ -315,7 +315,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <div className="text-center font-mono text-xs text-[#888888] space-y-1">
               <div>flowchain05@gmail.com</div>
               <div>+91 96860 71617 • +91 89516 48748</div>
-              <div className="text-[10px] text-white/40 pt-1">Founders: Shashwat V. Rao & Dev U. • COO: Nithin K. N.</div>
+              <div className="text-[10px] text-white/40 pt-1">Founders: Shashwat V. Rao & Dev U. • COO: Nithin KN</div>
             </div>
           </div>
         </div>

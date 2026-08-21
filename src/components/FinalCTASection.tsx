@@ -23,7 +23,7 @@ export const FinalCTASection: React.FC<FinalCTASectionProps> = ({ onOpenBooking 
         </h2>
 
         <p className="font-sans text-sm sm:text-base text-[#AAAAAA] max-w-lg mx-auto leading-relaxed">
-          Book a strategy session with Shashwat V. Rao, Dev U., & Nithin K. N. We'll audit your workflows and build your custom digital operating system.
+          Book a strategy session with Shashwat V. Rao, Dev U., & Nithin KN. We'll audit your workflows and build your custom digital operating system.
         </p>
 
         {/* Contact Numbers Bar */}

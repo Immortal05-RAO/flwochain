@@ -23,7 +23,7 @@ export const FooterSection: React.FC<FooterSectionProps> = () => {
 
         {/* Brand Statement */}
         <p className="font-sans text-xs sm:text-sm text-[#888888] max-w-lg leading-relaxed">
-          Flowchain is a digital systems and AI automation studio led by Shashwat V. Rao (Founder), Dev U. (Founder), and Nithin K. N. (COO).
+          Flowchain is a digital systems and AI automation studio led by Shashwat V. Rao (Founder), Dev U. (Founder), and Nithin KN (COO).
         </p>
 
         {/* Navigation Links Stack (Centered, 14px) */}

@@ -56,7 +56,7 @@ export const AboutPositioningSection: React.FC = () => {
                 </div>
                 <div className="p-3 bg-black/5 rounded-xl">
                   <span className="text-[#888888] block text-[10px] uppercase font-semibold">COO</span>
-                  <span className="font-bold text-sm">Nithin K. N.</span>
+                  <span className="font-bold text-sm">Nithin KN</span>
                 </div>
               </div>
             </div>
